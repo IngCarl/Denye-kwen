@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="ht">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Paramèt — DENYE KWEN</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link rel="stylesheet" href="assets/css/style.css">
+<style>
+  .danger-zone {
+    border: 2px solid #fecaca;
+    background: #fef2f2;
+    border-radius: var(--radius);
+    padding: 22px;
+  }
+  .danger-zone h4 { color: var(--danger); margin-bottom: 8px; }
+</style>
+</head>
+<body>
+<div class="layout">
+
+  <aside class="sidebar">
+    <div class="sidebar-brand">
+      <div class="logo"><i class="fa-solid fa-store"></i></div>
+      <div><h2>DENYE KWEN</h2><small>Panèl Admin · v2.0</small></div>
+    </div>
+    <nav class="sidebar-menu">
+      <div class="menu-label">Meni Prensipal</div>
+      <a href="admin.html"><i class="fa-solid fa-gauge-high"></i> Dashboard</a>
+      <a href="pwodwi.html"><i class="fa-solid fa-boxes-stacked"></i> Pwodwi &amp; Stòk</a>
+      <a href="kliyan.html"><i class="fa-solid fa-users"></i> Kliyan &amp; Founisè</a>
+      <a href="depans.html"><i class="fa-solid fa-money-bill-trend-up"></i> Depans</a>
+      <div class="menu-label">Analiz</div>
+      <a href="rapo.html"><i class="fa-solid fa-chart-line"></i> Rapò</a>
+      <div class="menu-label">Sistèm</div>
+      <a href="paramet.html" class="active"><i class="fa-solid fa-gear"></i> Paramèt &amp; Itilizatè</a>
+    </nav>
+    <div class="sidebar-footer">
+      <button class="btn-logout" data-logout><i class="fa-solid fa-right-from-bracket"></i> Dekonekte</button>
+    </div>
+  </aside>
+  <div class="sidebar-backdrop"></div>
+
+  <div class="main">
+    <header class="topbar">
+      <div style="display:flex;align-items:center;gap:14px;">
+        <button class="hamburger"><i class="fa-solid fa-bars"></i></button>
+        <h1><i class="fa-solid fa-gear"></i> Paramèt &amp; Itilizatè</h1>
+      </div>
+      <div class="topbar-right">
+        <div class="user-chip">
+          <div class="avatar" data-user-avatar>?</div>
+          <div class="u-info"><b data-user-name>—</b><small data-user-role>—</small></div>
+          <div class="dropdown">
+            <a href="#" class="danger" data-logout><i class="fa-solid fa-right-from-bracket"></i> Dekonekte</a>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="content">
+      <div class="tabs">
+        <button class="tab-btn active" data-tab="biznis"><i class="fa-solid fa-store"></i> Biznis</button>
+        <button class="tab-btn" data-tab="itilizate"><i class="fa-solid fa-users-gear"></i> Itilizatè</button>
+        <button class="tab-btn" data-tab="backup"><i class="fa-solid fa-database"></i> Backup</button>
+      </div>
+
+      <!-- TAB BIZNIS -->
+      <div class="tab-pane active" id="pane-biznis">
+        <div class="card">
+          <div class="card-header"><h3><i class="fa-solid fa-store"></i> Enfòmasyon Biznis</h3></div>
+          <div class="card-body">
+            <form id="bizForm">
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Non biznis <span class="req">*</span></label>
+                  <input type="text" id="bName" class="form-control" required>
+                </div>
+                <div class="form-group">
+                  <label>Telefòn</label>
+                  <input type="text" id="bPhone" class="form-control">
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Imèl</label>
+                  <input type="email" id="bEmail" class="form-control">
+                </div>
+                <div class="form-group">
+                  <label>NIF</label>
+                  <input type="text" id="bNif" class="form-control">
+                </div>
+              </div>
+              <div class="form-group">
+                <label>Adrès</label>
+                <input type="text" id="bAddress" class="form-control">
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Deviz</label>
+                  <input type="text" id="bCurrency" class="form-control" value="HTG">
+                </div>
+                <div class="form-group">
+                  <label>To taks (%)</label>
+                  <input type="number" id="bTax" class="form-control" min="0" step="any" value="0">
+                </div>
+              </div>
+              <div class="form-group">
+                <label>Mesaj pye resi</label>
+                <input type="text" id="bFooter" class="form-control">
+              </div>
+              <button type="submit" class="btn btn-primary"><i class="fa-solid fa-floppy-disk"></i> Anrejistre Paramèt</button>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB ITILIZATÈ -->
+      <div class="tab-pane" id="pane-itilizate">
+        <div class="card">
+          <div class="card-header">
+            <h3><i class="fa-solid fa-users-gear"></i> Jesyon Itilizatè</h3>
+            <button class="btn btn-primary" onclick="openUserModal()"><i class="fa-solid fa-user-plus"></i> Nouvo Itilizatè</button>
+          </div>
+          <div class="table-wrap">
+            <table class="tbl">
+              <thead><tr><th>Itilizatè</th><th>Username</th><th>Wòl</th><th>Estati</th><th>Dènye Koneksyon</th><th>Aksyon</th></tr></thead>
+              <tbody id="tblUsers"><tr><td colspan="6"><div class="spinner"></div></td></tr></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB BACKUP -->
+      <div class="tab-pane" id="pane-backup">
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-header"><h3><i class="fa-solid fa-download"></i> Kreye Backup</h3></div>
+            <div class="card-body">
+              <p style="color:var(--text-muted);font-size:14px;margin-bottom:16px;">
+                Telechaje yon kopi tout done sistèm nan an fòma JSON. Kenbe fichye sa a yon kote ki an sekirite.
+              </p>
+              <button class="btn btn-success" id="btnBackup" onclick="createBackup()">
+                <i class="fa-solid fa-download"></i> Kreye Backup (JSON)
+              </button>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header"><h3><i class="fa-solid fa-upload"></i> Restore</h3></div>
+            <div class="card-body">
+              <p style="color:var(--text-muted);font-size:14px;margin-bottom:16px;">
+                Chwazi yon fichye backup JSON pou verifye kontni li. (Restore konplè fèt via phpMyAdmin ak fichye SQL la.)
+              </p>
+              <input type="file" id="restoreFile" class="form-control" accept=".json">
+              <div id="restoreInfo" style="margin-top:12px;font-size:13.5px;"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="danger-zone">
+          <h4><i class="fa-solid fa-triangle-exclamation"></i> Zòn Danje</h4>
+          <p style="font-size:14px;color:#7f1d1d;margin-bottom:14px;">
+            Aksyon sa a ap efase TOUT vant, depans ak jounal aktivite yo pou tout tan.
+            Pwodwi, kliyan, founisè ak itilizatè yo ap rete. Aksyon sa a pa ka defèt!
+          </p>
+          <button class="btn btn-danger" onclick="wipeData()"><i class="fa-solid fa-trash"></i> Efase Tout Done Tranzaksyonèl</button>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<!-- MODAL ITILIZATÈ -->
+<div class="modal-overlay" id="userModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 id="userModalTitle"><i class="fa-solid fa-user-plus"></i> Nouvo Itilizatè</h3>
+      <button class="modal-close" onclick="closeModal('userModal')"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <form id="userForm">
+      <div class="modal-body">
+        <input type="hidden" id="uId">
+        <div class="form-group">
+          <label>Non konplè <span class="req">*</span></label>
+          <input type="text" id="uNon" class="form-control" required>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Username <span class="req">*</span></label>
+            <input type="text" id="uUsername" class="form-control" required>
+          </div>
+          <div class="form-group">
+            <label>Wòl <span class="req">*</span></label>
+            <select id="uRole" class="form-control" required>
+              <option value="Admin">👑 Admin</option>
+              <option value="Kesye">💰 Kesye</option>
+              <option value="Odite">🔍 Oditè</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Imèl</label>
+            <input type="email" id="uEmail" class="form-control">
+          </div>
+          <div class="form-group">
+            <label>Telefòn</label>
+            <input type="text" id="uTel" class="form-control">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label id="pwLabel">Modpas <span class="req">*</span></label>
+            <input type="password" id="uPassword" class="form-control" minlength="6" placeholder="Omwen 6 karaktè">
+          </div>
+          <div class="form-group">
+            <label>Estati</label>
+            <select id="uAktif" class="form-control">
+              <option value="1">✅ Aktif</option>
+              <option value="0">🚫 Dezaktive</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-light" onclick="closeModal('userModal')">Anile</button>
+        <button type="submit" class="btn btn-primary"><i class="fa-solid fa-floppy-disk"></i> Anrejistre</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script src="assets/js/app.js"></script>
+<script>
+let users = [];
+
+(async () => {
+  const user = await requireRole(['Admin']);
+  if (!user) return;
+  initShell(user);
+  loadSettings();
+  loadUsers();
+})();
+
+// Tabs
+document.querySelectorAll('.tab-btn').forEach(b => b.addEventListener('click', () => {
+  document.querySelectorAll('.tab-btn').forEach(x => x.classList.remove('active'));
+  document.querySelectorAll('.tab-pane').forEach(x => x.classList.remove('active'));
+  b.classList.add('active');
+  document.getElementById('pane-' + b.dataset.tab).classList.add('active');
+}));
+
+// ============ PARAMÈT BIZNIS ============
+async function loadSettings() {
+  const res = await api('settings.php');
+  if (res.success && res.data) {
+    const s = res.data;
+    document.getElementById('bName').value = s.business_name || '';
+    document.getElementById('bPhone').value = s.phone || '';
+    document.getElementById('bEmail').value = s.email || '';
+    document.getElementById('bNif').value = s.nif || '';
+    document.getElementById('bAddress').value = s.address || '';
+    document.getElementById('bCurrency').value = s.currency || 'HTG';
+    document.getElementById('bTax').value = s.tax_rate || 0;
+    document.getElementById('bFooter').value = s.receipt_footer || '';
+  }
+}
+
+document.getElementById('bizForm').addEventListener('submit', async e => {
+  e.preventDefault();
+  const res = await api('settings.php', 'PUT', {
+    business_name: document.getElementById('bName').value.trim(),
+    phone: document.getElementById('bPhone').value.trim(),
+    email: document.getElementById('bEmail').value.trim(),
+    nif: document.getElementById('bNif').value.trim(),
+    address: document.getElementById('bAddress').value.trim(),
+    currency: document.getElementById('bCurrency').value.trim() || 'HTG',
+    tax_rate: Number(document.getElementById('bTax').value) || 0,
+    receipt_footer: document.getElementById('bFooter').value.trim()
+  });
+  res.success ? toast(res.message, 'success') : toast(res.message, 'error');
+});
+
+// ============ ITILIZATÈ ============
+async function loadUsers() {
+  const res = await api('users.php');
+  if (!res.success) return;
+  users = res.data;
+  const roleBadge = { Admin: 'badge-purple', Kesye: 'badge-info', Odite: 'badge-warning' };
+  document.getElementById('tblUsers').innerHTML = users.map(u => `
+    <tr>
+      <td style="display:flex;align-items:center;gap:10px;">
+        <div class="avatar" style="width:34px;height:34px;font-size:12px;">${initials(u.non_konple)}</div>
+        <b>${esc(u.non_konple)}</b>
+      </td>
+      <td>${esc(u.username)}</td>
+      <td><span class="badge ${roleBadge[u.role]}">${esc(u.role)}</span></td>
+      <td>${u.aktif == 1 ? '<span class="badge badge-success">Aktif</span>' : '<span class="badge badge-danger">Dezaktive</span>'}</td>
+      <td>${u.dernye_koneksyon ? fmtDate(u.dernye_koneksyon) : '—'}</td>
+      <td class="actions">
+        <button class="btn btn-info btn-icon" onclick="openUserModal(${u.id})"><i class="fa-solid fa-pen"></i></button>
+        <button class="btn btn-danger btn-icon" onclick="deleteUser(${u.id}, '${esc(u.non_konple).replace(/'/g, "\\'")}')"><i class="fa-solid fa-trash"></i></button>
+      </td>
+    </tr>`).join('');
+}
+
+function openUserModal(id) {
+  document.getElementById('userForm').reset();
+  document.getElementById('uId').value = '';
+  document.getElementById('userModalTitle').innerHTML = '<i class="fa-solid fa-user-plus"></i> Nouvo Itilizatè';
+  document.getElementById('uPassword').required = true;
+  document.getElementById('pwLabel').innerHTML = 'Modpas <span class="req">*</span>';
+  if (id) {
+    const u = users.find(x => x.id == id);
+    if (u) {
+      document.getElementById('userModalTitle').innerHTML = '<i class="fa-solid fa-pen"></i> Modifye Itilizatè';
+      document.getElementById('uId').value = u.id;
+      document.getElementById('uNon').value = u.non_konple;
+      document.getElementById('uUsername').value = u.username;
+      document.getElementById('uRole').value = u.role;
+      document.getElementById('uEmail').value = u.email || '';
+      document.getElementById('uTel').value = u.telefon || '';
+      document.getElementById('uAktif').value = u.aktif;
+      document.getElementById('uPassword').required = false;
+      document.getElementById('pwLabel').textContent = 'Modpas (kite vid pou pa chanje)';
+    }
+  }
+  openModal('userModal');
+}
+
+document.getElementById('userForm').addEventListener('submit', async e => {
+  e.preventDefault();
+  const id = document.getElementById('uId').value;
+  const body = {
+    id: id || undefined,
+    non_konple: document.getElementById('uNon').value.trim(),
+    username: document.getElementById('uUsername').value.trim(),
+    role: document.getElementById('uRole').value,
+    email: document.getElementById('uEmail').value.trim(),
+    telefon: document.getElementById('uTel').value.trim(),
+    aktif: Number(document.getElementById('uAktif').value)
+  };
+  const pw = document.getElementById('uPassword').value;
+  if (pw) body.password = pw;
+
+  const res = await api('users.php', id ? 'PUT' : 'POST', body);
+  if (res.success) { toast(res.message, 'success'); closeModal('userModal'); loadUsers(); }
+  else toast(res.message, 'error');
+});
+
+async function deleteUser(id, non) {
+  if (!confirmAction(`Èske ou sèten ou vle dezaktive itilizatè "${non}"?`)) return;
+  const res = await api('users.php?id=' + id, 'DELETE');
+  if (res.success) { toast(res.message, 'success'); loadUsers(); }
+  else toast(res.message, 'error');
+}
+
+// ============ BACKUP ============
+async function createBackup() {
+  const btn = document.getElementById('btnBackup');
+  btnLoading(btn, true, 'Ap kreye backup...');
+  const res = await api('reports.php?type=backup');
+  btnLoading(btn, false);
+  if (!res.success) { toast(res.message, 'error'); return; }
+
+  const blob = new Blob([JSON.stringify(res.data, null, 2)], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `denye-kwen-backup-${new Date().toISOString().slice(0, 10)}.json`;
+  a.click();
+  URL.revokeObjectURL(a.href);
+  toast('Backup telechaje avèk siksè!', 'success');
+}
+
+document.getElementById('restoreFile').addEventListener('change', e => {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = () => {
+    try {
+      const data = JSON.parse(reader.result);
+      const tables = Object.keys(data.tables || {});
+      document.getElementById('restoreInfo').innerHTML = `
+        <span style="color:var(--success);"><i class="fa-solid fa-circle-check"></i>
+        Fichye valid! Vèsyon: ${esc(data.version || '?')} · Dat: ${esc(data.dat || '?')} ·
+        ${tables.length} tab (${tables.map(t => `${t}: ${data.tables[t].length}`).join(', ')})</span>`;
+    } catch {
+      document.getElementById('restoreInfo').innerHTML =
+        `<span style="color:var(--danger);"><i class="fa-solid fa-circle-xmark"></i> Fichye a pa yon backup JSON valid.</span>`;
+    }
+  };
+  reader.readAsText(file);
+});
+
+async function wipeData() {
+  if (!confirmAction('⚠️ ATANSYON!\n\nOu prèt pou efase TOUT vant, depans ak jounal aktivite yo.\nAksyon sa a PA KA DEFÈT.\n\nÈske ou sèten?')) return;
+  const conf = prompt('Pou konfime, tape: EFASE');
+  if (conf !== 'EFASE') { toast('Aksyon anile.', 'info'); return; }
+  const res = await api('settings.php?reset=1', 'DELETE');
+  res.success ? toast(res.message, 'success') : toast(res.message, 'error');
+}
+</script>
+</body>
+</html>

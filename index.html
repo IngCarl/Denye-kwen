@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="ht">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DENYE KWEN BIZNIS — Koneksyon</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link rel="stylesheet" href="assets/css/style.css">
+<style>
+  body {
+    background: linear-gradient(135deg, #1e3a8a 0%, #172c69 55%, #0f1d47 100%);
+    display: flex; align-items: center; justify-content: center;
+    min-height: 100vh; padding: 18px;
+  }
+  .login-card {
+    background: #fff; border-radius: 20px;
+    width: 100%; max-width: 430px;
+    box-shadow: 0 24px 60px rgba(0,0,0,.35);
+    overflow: hidden;
+    animation: slideUp .5s ease;
+  }
+  .login-head {
+    background: linear-gradient(135deg, #1e3a8a, #2948a5);
+    padding: 34px 30px 28px; text-align: center; color: #fff;
+  }
+  .login-logo {
+    width: 76px; height: 76px; margin: 0 auto 14px;
+    background: #f59e0b; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 34px; box-shadow: 0 8px 20px rgba(245,158,11,.45);
+  }
+  .login-head h1 { font-size: 24px; letter-spacing: 1px; }
+  .login-head p { opacity: .8; font-size: 13px; margin-top: 4px; }
+  .login-body { padding: 30px; }
+  .pw-wrap { position: relative; }
+  .pw-wrap .toggle-eye {
+    position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
+    background: none; border: none; color: #64748b; font-size: 15px;
+  }
+  .remember { display: flex; align-items: center; gap: 8px; font-size: 13.5px; color: #475569; margin-bottom: 18px; }
+  .demo-box {
+    margin-top: 22px; padding: 16px;
+    background: #f1f5f9; border-radius: 12px;
+    font-size: 13px;
+  }
+  .demo-box h4 { font-size: 13px; color: #1e3a8a; margin-bottom: 10px; display: flex; align-items: center; gap: 6px; }
+  .demo-acct {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 8px 10px; border-radius: 8px; cursor: pointer;
+    transition: background .2s;
+  }
+  .demo-acct:hover { background: #e2e8f0; }
+  .demo-acct code { background: #fff; padding: 2px 8px; border-radius: 6px; font-size: 12px; color: #1e3a8a; }
+</style>
+</head>
+<body>
+
+<div class="login-card">
+  <div class="login-head">
+    <div class="login-logo"><i class="fa-solid fa-store"></i></div>
+    <h1>DENYE KWEN BIZNIS</h1>
+    <p>Sistèm Jesyon Denye Kwen Biznis</p>
+  </div>
+  <div class="login-body">
+    <form id="loginForm">
+      <div class="form-group">
+        <label><i class="fa-solid fa-user"></i> Non itilizatè</label>
+        <input type="text" id="username" class="form-control" placeholder="Antre non itilizatè ou" autocomplete="username" required>
+      </div>
+      <div class="form-group">
+        <label><i class="fa-solid fa-lock"></i> Modpas</label>
+        <div class="pw-wrap">
+          <input type="password" id="password" class="form-control" placeholder="Antre modpas ou" autocomplete="current-password" required>
+          <button type="button" class="toggle-eye" id="toggleEye"><i class="fa-solid fa-eye"></i></button>
+        </div>
+      </div>
+      <label class="remember">
+        <input type="checkbox" id="remember"> Sonje mwen
+      </label>
+      <button type="submit" id="btnLogin" class="btn btn-primary btn-block btn-lg">
+        <i class="fa-solid fa-right-to-bracket"></i> Konekte
+      </button>
+    </form>
+
+    
+  </div>
+</div>
+
+<script src="assets/js/app.js"></script>
+<script>
+// Si deja konekte, ale dirèk sou dashboard la
+(async () => {
+  const u = getUser();
+  if (u) {
+    const check = await api('auth.php?action=check');
+    if (check.success) window.location.href = dashboardFor(check.data.role);
+    else clearUser();
+  }
+})();
+
+// Toggle je modpas
+document.getElementById('toggleEye').addEventListener('click', () => {
+  const pw = document.getElementById('password');
+  const icon = document.querySelector('#toggleEye i');
+  pw.type = pw.type === 'password' ? 'text' : 'password';
+  icon.className = pw.type === 'password' ? 'fa-solid fa-eye' : 'fa-solid fa-eye-slash';
+});
+
+// Kont demo → ranpli fòm
+document.querySelectorAll('.demo-acct').forEach(el => {
+  el.addEventListener('click', () => {
+    document.getElementById('username').value = el.dataset.u;
+    document.getElementById('password').value = el.dataset.p;
+  });
+});
+
+// Soumèt login
+document.getElementById('loginForm').addEventListener('submit', async e => {
+  e.preventDefault();
+  const btn = document.getElementById('btnLogin');
+  btnLoading(btn, true, 'Koneksyon...');
+
+  const res = await api('auth.php?action=login', 'POST', {
+    username: document.getElementById('username').value.trim(),
+    password: document.getElementById('password').value
+  });
+
+  btnLoading(btn, false);
+
+  if (res.success) {
+    saveUser(res.data, document.getElementById('remember').checked);
+    toast(res.message, 'success');
+    setTimeout(() => window.location.href = dashboardFor(res.data.role), 600);
+  } else {
+    toast(res.message, 'error');
+  }
+});
+</script>
+</body>
+</html>

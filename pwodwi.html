@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="ht">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pwodwi &amp; Stòk — DENYE KWEN</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+<div class="layout">
+
+  <aside class="sidebar">
+    <div class="sidebar-brand">
+      <div class="logo"><i class="fa-solid fa-store"></i></div>
+      <div><h2>DENYE KWEN</h2><small>Panèl Admin · v2.0</small></div>
+    </div>
+    <nav class="sidebar-menu">
+      <div class="menu-label">Meni Prensipal</div>
+      <a href="admin.html"><i class="fa-solid fa-gauge-high"></i> Dashboard</a>
+      <a href="pwodwi.html" class="active"><i class="fa-solid fa-boxes-stacked"></i> Pwodwi &amp; Stòk</a>
+      <a href="kliyan.html"><i class="fa-solid fa-users"></i> Kliyan &amp; Founisè</a>
+      <a href="depans.html"><i class="fa-solid fa-money-bill-trend-up"></i> Depans</a>
+      <div class="menu-label">Analiz</div>
+      <a href="rapo.html"><i class="fa-solid fa-chart-line"></i> Rapò</a>
+      <div class="menu-label">Sistèm</div>
+      <a href="paramet.html"><i class="fa-solid fa-gear"></i> Paramèt &amp; Itilizatè</a>
+    </nav>
+    <div class="sidebar-footer">
+      <button class="btn-logout" data-logout><i class="fa-solid fa-right-from-bracket"></i> Dekonekte</button>
+    </div>
+  </aside>
+  <div class="sidebar-backdrop"></div>
+
+  <div class="main">
+    <header class="topbar">
+      <div style="display:flex;align-items:center;gap:14px;">
+        <button class="hamburger"><i class="fa-solid fa-bars"></i></button>
+        <h1><i class="fa-solid fa-boxes-stacked"></i> Pwodwi &amp; Stòk</h1>
+      </div>
+      <div class="topbar-right">
+        <button class="btn btn-primary" onclick="openAddModal()"><i class="fa-solid fa-plus"></i> Nouvo Pwodwi</button>
+        <div class="user-chip">
+          <div class="avatar" data-user-avatar>?</div>
+          <div class="u-info"><b data-user-name>—</b><small data-user-role>—</small></div>
+          <div class="dropdown">
+            <a href="#" class="danger" data-logout><i class="fa-solid fa-right-from-bracket"></i> Dekonekte</a>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="content">
+      <!-- STAT CARDS -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon blue"><i class="fa-solid fa-boxes-stacked"></i></div>
+          <div class="stat-info"><h3 id="stTotal">—</h3><p>Total Pwodwi</p></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon orange"><i class="fa-solid fa-triangle-exclamation"></i></div>
+          <div class="stat-info"><h3 id="stBa">—</h3><p>Stòk Ba</p></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon red"><i class="fa-solid fa-ban"></i></div>
+          <div class="stat-info"><h3 id="stEpwize">—</h3><p>Epwize</p></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon green"><i class="fa-solid fa-coins"></i></div>
+          <div class="stat-info"><h3 id="stVale">—</h3><p>Valè Stòk</p></div>
+        </div>
+      </div>
+
+      <!-- TABLE -->
+      <div class="card">
+        <div class="card-header">
+          <div class="search-bar">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" id="searchInput" class="form-control" placeholder="Chèche pa non, kòd oswa barcode...">
+          </div>
+          <select id="catFilter" class="form-control" style="max-width:200px;">
+            <option value="">Tout kategori</option>
+          </select>
+        </div>
+        <div class="table-wrap">
+          <table class="tbl">
+            <thead>
+              <tr><th>Kòd</th><th>Pwodwi</th><th>Kategori</th><th>Pri Dacha</th><th>Pri Vant</th><th>Stòk</th><th>Estati</th><th>Aksyon</th></tr>
+            </thead>
+            <tbody id="tblProds"><tr><td colspan="8"><div class="spinner"></div></td></tr></tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<!-- MODAL FÒM PWODWI -->
+<div class="modal-overlay" id="prodModal">
+  <div class="modal modal-lg">
+    <div class="modal-header">
+      <h3 id="modalTitle"><i class="fa-solid fa-plus"></i> Nouvo Pwodwi</h3>
+      <button class="modal-close" onclick="closeModal('prodModal')"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <form id="prodForm">
+      <div class="modal-body">
+        <input type="hidden" id="fId">
+        <div class="form-row">
+          <div class="form-group">
+            <label>Kòd <span class="req">*</span></label>
+            <input type="text" id="fKod" class="form-control" required placeholder="Ex: PRD-013">
+          </div>
+          <div class="form-group">
+            <label>Barcode</label>
+            <input type="text" id="fBarcode" class="form-control" placeholder="Ex: 7401001000099">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Non pwodwi <span class="req">*</span></label>
+          <input type="text" id="fNon" class="form-control" required placeholder="Ex: Diri Tchako 5lb">
+        </div>
+        <div class="form-group">
+          <label>Deskripsyon</label>
+          <textarea id="fDesk" class="form-control" rows="2"></textarea>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Kategori</label>
+            <select id="fKat" class="form-control"></select>
+          </div>
+          <div class="form-group">
+            <label>Icon (emoji)</label>
+            <input type="text" id="fIcon" class="form-control" value="📦" maxlength="4">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Pri Dacha (HTG)</label>
+            <input type="number" id="fPriDacha" class="form-control" min="0" step="any" value="0">
+          </div>
+          <div class="form-group">
+            <label>Pri Vant (HTG) <span class="req">*</span></label>
+            <input type="number" id="fPri" class="form-control" min="0" step="any" required>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Stòk</label>
+            <input type="number" id="fStok" class="form-control" min="0" value="0">
+          </div>
+          <div class="form-group">
+            <label>Stòk Minimòm (alèt)</label>
+            <input type="number" id="fMinStok" class="form-control" min="0" value="5">
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-light" onclick="closeModal('prodModal')">Anile</button>
+        <button type="submit" class="btn btn-primary" id="btnSave"><i class="fa-solid fa-floppy-disk"></i> Anrejistre</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script src="assets/js/app.js"></script>
+<script>
+let products = [], categories = [];
+
+(async () => {
+  const user = await requireRole(['Admin']);
+  if (!user) return;
+  initShell(user);
+  await loadAll();
+})();
+
+async function loadAll() {
+  const [prodRes, catRes, statRes] = await Promise.all([
+    api('products.php'),
+    api('products.php?kategori=1'),
+    api('reports.php?type=products')
+  ]);
+
+  if (catRes.success) {
+    categories = catRes.data;
+    const opts = categories.map(c => `<option value="${c.id}">${c.icon} ${esc(c.non)}</option>`).join('');
+    document.getElementById('catFilter').innerHTML = `<option value="">Tout kategori</option>` + opts;
+    document.getElementById('fKat').innerHTML = `<option value="">— San kategori —</option>` + opts;
+  }
+  if (prodRes.success) { products = prodRes.data; renderTable(); }
+  if (statRes.success) {
+    const s = statRes.data;
+    document.getElementById('stTotal').textContent = s.total;
+    document.getElementById('stBa').textContent = s.stok_ba;
+    document.getElementById('stEpwize').textContent = s.epwize;
+    document.getElementById('stVale').textContent = money(s.vale_stok);
+  }
+}
+
+function renderTable() {
+  const q = document.getElementById('searchInput').value.toLowerCase().trim();
+  const cat = document.getElementById('catFilter').value;
+  const list = products.filter(p =>
+    (!cat || p.kategori_id == cat) &&
+    (!q || p.non.toLowerCase().includes(q) || p.kod.toLowerCase().includes(q) || (p.barcode || '').includes(q))
+  );
+
+  document.getElementById('tblProds').innerHTML = list.length
+    ? list.map(p => {
+        const st = p.stok <= 0
+          ? '<span class="badge badge-danger">Epwize</span>'
+          : (p.stok <= p.min_stok ? '<span class="badge badge-warning">Ba</span>' : '<span class="badge badge-success">OK</span>');
+        return `
+          <tr>
+            <td><b>${esc(p.kod)}</b></td>
+            <td>${p.icon || '📦'} ${esc(p.non)}</td>
+            <td>${esc(p.kategori_non || '—')}</td>
+            <td>${money(p.pri_dacha)}</td>
+            <td><b>${money(p.pri)}</b></td>
+            <td>${p.stok}</td>
+            <td>${st}</td>
+            <td class="actions">
+              <button class="btn btn-info btn-icon" title="Modifye" onclick="openEditModal(${p.id})"><i class="fa-solid fa-pen"></i></button>
+              <button class="btn btn-danger btn-icon" title="Efase" onclick="deleteProd(${p.id}, '${esc(p.non).replace(/'/g, "\\'")}')"><i class="fa-solid fa-trash"></i></button>
+            </td>
+          </tr>`;
+      }).join('')
+    : `<tr><td colspan="8"><div class="empty-state"><i class="fa-solid fa-box-open"></i><p>Okenn pwodwi pa jwenn.</p></div></td></tr>`;
+}
+
+document.getElementById('searchInput').addEventListener('input', renderTable);
+document.getElementById('catFilter').addEventListener('change', renderTable);
+
+function openAddModal() {
+  document.getElementById('modalTitle').innerHTML = '<i class="fa-solid fa-plus"></i> Nouvo Pwodwi';
+  document.getElementById('prodForm').reset();
+  document.getElementById('fId').value = '';
+  document.getElementById('fIcon').value = '📦';
+  openModal('prodModal');
+}
+
+function openEditModal(id) {
+  const p = products.find(x => x.id == id);
+  if (!p) return;
+  document.getElementById('modalTitle').innerHTML = '<i class="fa-solid fa-pen"></i> Modifye Pwodwi';
+  document.getElementById('fId').value = p.id;
+  document.getElementById('fKod').value = p.kod;
+  document.getElementById('fBarcode').value = p.barcode || '';
+  document.getElementById('fNon').value = p.non;
+  document.getElementById('fDesk').value = p.deskripsyon || '';
+  document.getElementById('fKat').value = p.kategori_id || '';
+  document.getElementById('fIcon').value = p.icon || '📦';
+  document.getElementById('fPriDacha').value = p.pri_dacha;
+  document.getElementById('fPri').value = p.pri;
+  document.getElementById('fStok').value = p.stok;
+  document.getElementById('fMinStok').value = p.min_stok;
+  openModal('prodModal');
+}
+
+document.getElementById('prodForm').addEventListener('submit', async e => {
+  e.preventDefault();
+  const id = document.getElementById('fId').value;
+  const body = {
+    id: id || undefined,
+    kod: document.getElementById('fKod').value.trim(),
+    barcode: document.getElementById('fBarcode').value.trim(),
+    non: document.getElementById('fNon').value.trim(),
+    deskripsyon: document.getElementById('fDesk').value.trim(),
+    kategori_id: document.getElementById('fKat').value || null,
+    icon: document.getElementById('fIcon').value.trim() || '📦',
+    pri_dacha: Number(document.getElementById('fPriDacha').value) || 0,
+    pri: Number(document.getElementById('fPri').value),
+    stok: Number(document.getElementById('fStok').value) || 0,
+    min_stok: Number(document.getElementById('fMinStok').value) || 5
+  };
+
+  const btn = document.getElementById('btnSave');
+  btnLoading(btn, true);
+  const res = await api('products.php', id ? 'PUT' : 'POST', body);
+  btnLoading(btn, false);
+
+  if (res.success) {
+    toast(res.message, 'success');
+    closeModal('prodModal');
+    loadAll();
+  } else toast(res.message, 'error');
+});
+
+async function deleteProd(id, non) {
+  if (!confirmAction(`Èske ou sèten ou vle efase pwodwi "${non}"?`)) return;
+  const res = await api('products.php?id=' + id, 'DELETE');
+  if (res.success) { toast(res.message, 'success'); loadAll(); }
+  else toast(res.message, 'error');
+}
+</script>
+</body>
+</html>

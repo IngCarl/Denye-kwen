@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="ht">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rapò — DENYE KWEN</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link rel="stylesheet" href="assets/css/style.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+  .fin-card { border-radius: var(--radius); padding: 24px; color: #fff; box-shadow: var(--shadow); }
+  .fin-card h2 { font-size: 26px; margin-top: 6px; }
+  .fin-card.green { background: linear-gradient(135deg, #10b981, #059669); }
+  .fin-card.red   { background: linear-gradient(135deg, #ef4444, #b91c1c); }
+  .fin-card.blue  { background: linear-gradient(135deg, #3b82f6, #1e3a8a); }
+  @media print {
+    .sidebar, .topbar, .no-print, .sidebar-backdrop { display: none !important; }
+    .main { margin-left: 0 !important; }
+    body * { visibility: visible; }
+  }
+</style>
+</head>
+<body>
+<div class="layout">
+
+  <aside class="sidebar" id="sidebarNav">
+    <div class="sidebar-brand">
+      <div class="logo"><i class="fa-solid fa-store"></i></div>
+      <div><h2>DENYE KWEN</h2><small id="brandRole">v2.0</small></div>
+    </div>
+    <nav class="sidebar-menu" id="sideMenu"></nav>
+    <div class="sidebar-footer">
+      <button class="btn-logout" data-logout><i class="fa-solid fa-right-from-bracket"></i> Dekonekte</button>
+    </div>
+  </aside>
+  <div class="sidebar-backdrop"></div>
+
+  <div class="main">
+    <header class="topbar">
+      <div style="display:flex;align-items:center;gap:14px;">
+        <button class="hamburger"><i class="fa-solid fa-bars"></i></button>
+        <h1><i class="fa-solid fa-chart-line"></i> Rapò &amp; Analiz</h1>
+      </div>
+      <div class="topbar-right">
+        <button class="btn btn-secondary no-print" onclick="window.print()"><i class="fa-solid fa-file-pdf"></i> Enprime PDF</button>
+        <div class="user-chip">
+          <div class="avatar" data-user-avatar>?</div>
+          <div class="u-info"><b data-user-name>—</b><small data-user-role>—</small></div>
+          <div class="dropdown">
+            <a href="#" class="danger" data-logout><i class="fa-solid fa-right-from-bracket"></i> Dekonekte</a>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="content">
+      <!-- FILTÈ DAT -->
+      <div class="card no-print">
+        <div class="card-body" style="display:flex;gap:14px;flex-wrap:wrap;align-items:end;">
+          <div class="form-group" style="margin:0;">
+            <label>Depi</label>
+            <input type="date" id="datDebi" class="form-control">
+          </div>
+          <div class="form-group" style="margin:0;">
+            <label>Jiska</label>
+            <input type="date" id="datFen" class="form-control">
+          </div>
+          <button class="btn btn-primary" onclick="loadReport()"><i class="fa-solid fa-filter"></i> Aplike</button>
+        </div>
+      </div>
+
+      <!-- FIN CARDS -->
+      <div class="stats-grid" style="grid-template-columns:repeat(auto-fit,minmax(240px,1fr));">
+        <div class="fin-card green">
+          <p><i class="fa-solid fa-arrow-trend-up"></i> Revni Total</p>
+          <h2 id="finRevni">—</h2>
+        </div>
+        <div class="fin-card red">
+          <p><i class="fa-solid fa-arrow-trend-down"></i> Depans Total</p>
+          <h2 id="finDepans">—</h2>
+        </div>
+        <div class="fin-card blue">
+          <p><i class="fa-solid fa-scale-balanced"></i> Pwofi Nèt</p>
+          <h2 id="finPwofi">—</h2>
+        </div>
+      </div>
+
+      <!-- GRAFIK -->
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-header"><h3><i class="fa-solid fa-chart-column"></i> Lavant pa Jou</h3></div>
+          <div class="card-body"><div class="chart-box"><canvas id="chartBar"></canvas></div></div>
+        </div>
+        <div class="card">
+          <div class="card-header"><h3><i class="fa-solid fa-chart-pie"></i> Mwayen Peman</h3></div>
+          <div class="card-body"><div class="chart-box"><canvas id="chartPay"></canvas></div></div>
+        </div>
+      </div>
+
+      <!-- TOUT TRANZAKSYON -->
+      <div class="card">
+        <div class="card-header"><h3><i class="fa-solid fa-receipt"></i> Tout Tranzaksyon</h3></div>
+        <div class="table-wrap">
+          <table class="tbl">
+            <thead><tr><th># Fakti</th><th>Kliyan</th><th>Kesye</th><th>Total</th><th>Peman</th><th>Estati</th><th>Dat</th></tr></thead>
+            <tbody id="tblTranz"><tr><td colspan="7"><div class="spinner"></div></td></tr></tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<script src="assets/js/app.js"></script>
+<script>
+let chartBar = null, chartPay = null;
+
+const ADMIN_MENU = `
+  <div class="menu-label">Meni Prensipal</div>
+  <a href="admin.html"><i class="fa-solid fa-gauge-high"></i> Dashboard</a>
+  <a href="pwodwi.html"><i class="fa-solid fa-boxes-stacked"></i> Pwodwi &amp; Stòk</a>
+  <a href="kliyan.html"><i class="fa-solid fa-users"></i> Kliyan &amp; Founisè</a>
+  <a href="depans.html"><i class="fa-solid fa-money-bill-trend-up"></i> Depans</a>
+  <div class="menu-label">Analiz</div>
+  <a href="rapo.html" class="active"><i class="fa-solid fa-chart-line"></i> Rapò</a>
+  <div class="menu-label">Sistèm</div>
+  <a href="paramet.html"><i class="fa-solid fa-gear"></i> Paramèt &amp; Itilizatè</a>`;
+
+const ODITE_MENU = `
+  <div class="menu-label">Meni</div>
+  <a href="odite.html"><i class="fa-solid fa-gauge-high"></i> Dashboard</a>
+  <a href="rapo.html" class="active"><i class="fa-solid fa-chart-line"></i> Rapò</a>`;
+
+(async () => {
+  const user = await requireRole(['Admin', 'Odite']);
+  if (!user) return;
+  initShell(user);
+
+  document.getElementById('sideMenu').innerHTML = user.role === 'Admin' ? ADMIN_MENU : ODITE_MENU;
+  document.getElementById('brandRole').textContent = user.role === 'Admin' ? 'Panèl Admin · v2.0' : 'Panèl Oditè · v2.0';
+  if (user.role === 'Odite') document.getElementById('sidebarNav').classList.add('purple');
+
+  // Peryòd default: mwa aktyèl la
+  const now = new Date();
+  document.getElementById('datDebi').value = new Date(now.getFullYear(), now.getMonth(), 1).toLocaleDateString('sv-SE');
+  document.getElementById('datFen').value = now.toLocaleDateString('sv-SE');
+
+  loadReport();
+})();
+
+async function loadReport() {
+  const debi = document.getElementById('datDebi').value;
+  const fen = document.getElementById('datFen').value;
+  const res = await api(`reports.php?type=finans&debi=${debi}&fen=${fen}`);
+  if (!res.success) { toast(res.message, 'error'); return; }
+  const d = res.data;
+
+  document.getElementById('finRevni').textContent = money(d.revni);
+  document.getElementById('finDepans').textContent = money(d.depans);
+  document.getElementById('finPwofi').textContent = money(d.pwofi);
+
+  // Bar chart lavant pa jou
+  if (chartBar) chartBar.destroy();
+  chartBar = new Chart(document.getElementById('chartBar'), {
+    type: 'bar',
+    data: {
+      labels: d.pa_jou.map(x => fmtDateOnly(x.jou)),
+      datasets: [{ label: 'Lavant (HTG)', data: d.pa_jou.map(x => Number(x.total)), backgroundColor: '#1e3a8a', borderRadius: 8 }]
+    },
+    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
+  });
+
+  // Doughnut mwayen peman
+  const payLbl = { kach: '💵 Kach', moncash: '📱 MonCash', natcash: '📲 NatCash', kat: '💳 Kat', kredi: '📒 Kredi' };
+  if (chartPay) chartPay.destroy();
+  chartPay = new Chart(document.getElementById('chartPay'), {
+    type: 'doughnut',
+    data: {
+      labels: d.mwayen_peman.map(x => payLbl[x.mwayen_peman] || x.mwayen_peman),
+      datasets: [{
+        data: d.mwayen_peman.map(x => Number(x.total)),
+        backgroundColor: ['#10b981', '#f59e0b', '#3b82f6', '#ef4444', '#7c3aed']
+      }]
+    },
+    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom' } } }
+  });
+
+  // Table
+  const badges = { konplete: 'badge-success', anile: 'badge-danger', retounen: 'badge-warning' };
+  document.getElementById('tblTranz').innerHTML = d.tranzaksyon.length
+    ? d.tranzaksyon.map(s => `
+        <tr>
+          <td><b>${esc(s.nimewo_fakti)}</b></td>
+          <td>${esc(s.client_non)}</td>
+          <td>${esc(s.user_non || '—')}</td>
+          <td><b>${money(s.total)}</b></td>
+          <td>${esc(s.mwayen_peman)}</td>
+          <td><span class="badge ${badges[s.estati]}">${esc(s.estati)}</span></td>
+          <td>${fmtDate(s.dat)}</td>
+        </tr>`).join('')
+    : `<tr><td colspan="7"><div class="empty-state"><i class="fa-solid fa-receipt"></i><p>Okenn tranzaksyon nan peryòd sa a.</p></div></td></tr>`;
+}
+</script>
+</body>
+</html>

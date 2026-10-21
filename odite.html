@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="ht">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard Oditè — DENYE KWEN</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link rel="stylesheet" href="assets/css/style.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+<body>
+<div class="layout">
+
+  <!-- SIDEBAR MÒV (Oditè) -->
+  <aside class="sidebar purple">
+    <div class="sidebar-brand">
+      <div class="logo" style="background:#7c3aed;"><i class="fa-solid fa-magnifying-glass-chart"></i></div>
+      <div><h2>DENYE KWEN</h2><small>Panèl Oditè · v2.0</small></div>
+    </div>
+    <nav class="sidebar-menu">
+      <div class="menu-label">Meni</div>
+      <a href="odite.html" class="active"><i class="fa-solid fa-gauge-high"></i> Dashboard</a>
+      <a href="rapo.html"><i class="fa-solid fa-chart-line"></i> Rapò</a>
+    </nav>
+    <div class="sidebar-footer">
+      <button class="btn-logout" data-logout><i class="fa-solid fa-right-from-bracket"></i> Dekonekte</button>
+    </div>
+  </aside>
+  <div class="sidebar-backdrop"></div>
+
+  <!-- MAIN -->
+  <div class="main">
+    <header class="topbar">
+      <div style="display:flex;align-items:center;gap:14px;">
+        <button class="hamburger"><i class="fa-solid fa-bars"></i></button>
+        <h1 style="color:#5b21b6;"><i class="fa-solid fa-magnifying-glass-chart"></i> Dashboard Oditè</h1>
+      </div>
+      <div class="topbar-right">
+        <div class="user-chip">
+          <div class="avatar" style="background:linear-gradient(135deg,#7c3aed,#5b21b6);" data-user-avatar>?</div>
+          <div class="u-info"><b data-user-name>—</b><small data-user-role>—</small></div>
+          <i class="fa-solid fa-chevron-down" style="font-size:11px;color:#64748b;"></i>
+          <div class="dropdown">
+            <a href="#" class="danger" data-logout><i class="fa-solid fa-right-from-bracket"></i> Dekonekte</a>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="content">
+      <!-- BANDWÒL READ-ONLY -->
+      <div class="readonly-banner">
+        <i class="fa-solid fa-eye"></i> Mòd Gade Sèlman — Ou ka konsilte tout done, men ou pa ka fè okenn modifikasyon.
+      </div>
+
+      <!-- STAT CARDS -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon green"><i class="fa-solid fa-sack-dollar"></i></div>
+          <div class="stat-info"><h3 id="stLavant">—</h3><p>Lavant Jodi a</p></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon blue"><i class="fa-solid fa-chart-line"></i></div>
+          <div class="stat-info"><h3 id="stPwofi">—</h3><p>Pwofi Jodi a</p></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon orange"><i class="fa-solid fa-receipt"></i></div>
+          <div class="stat-info"><h3 id="stTranz">—</h3><p>Tranzaksyon Jodi a</p></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon red"><i class="fa-solid fa-triangle-exclamation"></i></div>
+          <div class="stat-info"><h3 id="stStokBa">—</h3><p>Pwodwi Stòk Ba</p></div>
+        </div>
+      </div>
+
+      <div class="grid-3-2">
+        <!-- GRAFIK -->
+        <div class="card">
+          <div class="card-header"><h3><i class="fa-solid fa-chart-area"></i> Lavant pa Semèn</h3></div>
+          <div class="card-body"><div class="chart-box"><canvas id="chartLavant"></canvas></div></div>
+        </div>
+
+        <!-- JOUNAL AKTIVITE -->
+        <div class="card">
+          <div class="card-header"><h3><i class="fa-solid fa-list-check"></i> Jounal Aktivite (15 dènye)</h3></div>
+          <div class="card-body" id="logsList" style="max-height:320px;overflow-y:auto;">
+            <div class="spinner"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TOUT TRANZAKSYON -->
+      <div class="card">
+        <div class="card-header"><h3><i class="fa-solid fa-receipt"></i> Tout Tranzaksyon</h3></div>
+        <div class="table-wrap">
+          <table class="tbl">
+            <thead><tr><th># Fakti</th><th>Kliyan</th><th>Kesye</th><th>Total</th><th>Peman</th><th>Estati</th><th>Dat</th></tr></thead>
+            <tbody id="tblTranz"><tr><td colspan="7"><div class="spinner"></div></td></tr></tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<script src="assets/js/app.js"></script>
+<script>
+(async () => {
+  const user = await requireRole(['Odite']);
+  if (!user) return;
+  initShell(user);
+  loadData();
+})();
+
+async function loadData() {
+  const [dash, logs, sales] = await Promise.all([
+    api('reports.php?type=dashboard'),
+    api('reports.php?type=logs&limit=15'),
+    api('sales.php?limit=50')
+  ]);
+
+  if (dash.success) {
+    const d = dash.data;
+    document.getElementById('stLavant').textContent = money(d.lavant_jodi);
+    document.getElementById('stPwofi').textContent = money(d.pwofi_jodi);
+    document.getElementById('stTranz').textContent = d.tranzaksyon_jodi;
+    document.getElementById('stStokBa').textContent = d.stok_ba;
+
+    // Grafik lavant 7 jou
+    const map = {};
+    d.lavant_7jou.forEach(r => map[r.jou] = Number(r.total));
+    const days = [];
+    for (let i = 6; i >= 0; i--) {
+      const dt = new Date(); dt.setDate(dt.getDate() - i);
+      const key = dt.toISOString().slice(0, 10);
+      days.push({ label: dt.toLocaleDateString('fr-FR', { weekday: 'short' }), val: map[key] || 0 });
+    }
+    new Chart(document.getElementById('chartLavant'), {
+      type: 'bar',
+      data: {
+        labels: days.map(x => x.label),
+        datasets: [{ label: 'Lavant (HTG)', data: days.map(x => x.val), backgroundColor: '#7c3aed', borderRadius: 8 }]
+      },
+      options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
+    });
+  }
+
+  if (logs.success) {
+    const colors = { KONEKSYON: 'badge-info', DEKONEKSYON: 'badge-muted', KREYE: 'badge-success', MODIFYE: 'badge-warning', EFASE: 'badge-danger', VANT: 'badge-purple', BACKUP: 'badge-info' };
+    document.getElementById('logsList').innerHTML = logs.data.length
+      ? logs.data.map(l => `
+          <div style="padding:10px 0;border-bottom:1px solid var(--border);font-size:13.5px;">
+            <div style="display:flex;justify-content:space-between;gap:8px;">
+              <b>${esc(l.user_non || 'Sistèm')}</b>
+              <span class="badge ${colors[l.aksyon] || 'badge-muted'}">${esc(l.aksyon)}</span>
+            </div>
+            <div style="color:var(--text-muted);margin-top:3px;">${esc(l.deskripsyon || l.modil)}</div>
+            <small style="color:var(--text-muted);">${fmtDate(l.dat)}</small>
+          </div>`).join('')
+      : `<div class="empty-state"><i class="fa-solid fa-list"></i><p>Jounal la vid.</p></div>`;
+  }
+
+  if (sales.success) {
+    const badges = { konplete: 'badge-success', anile: 'badge-danger', retounen: 'badge-warning' };
+    document.getElementById('tblTranz').innerHTML = sales.data.length
+      ? sales.data.map(s => `
+          <tr>
+            <td><b>${esc(s.nimewo_fakti)}</b></td>
+            <td>${esc(s.client_non)}</td>
+            <td>${esc(s.user_non || '—')}</td>
+            <td><b>${money(s.total)}</b></td>
+            <td>${esc(s.mwayen_peman)}</td>
+            <td><span class="badge ${badges[s.estati]}">${esc(s.estati)}</span></td>
+            <td>${fmtDate(s.dat)}</td>
+          </tr>`).join('')
+      : `<tr><td colspan="7"><div class="empty-state"><i class="fa-solid fa-receipt"></i><p>Poko gen tranzaksyon.</p></div></td></tr>`;
+  }
+}
+</script>
+</body>
+</html>

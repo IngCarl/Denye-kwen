@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="ht">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard Admin — DENYE KWEN</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link rel="stylesheet" href="assets/css/style.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+<body>
+<div class="layout">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-brand">
+      <div class="logo"><i class="fa-solid fa-store"></i></div>
+      <div><h2>DENYE KWEN</h2><small>Panèl Admin · v2.0</small></div>
+    </div>
+    <nav class="sidebar-menu">
+      <div class="menu-label">Meni Prensipal</div>
+      <a href="admin.html" class="active"><i class="fa-solid fa-gauge-high"></i> Dashboard</a>
+      <a href="pwodwi.html"><i class="fa-solid fa-boxes-stacked"></i> Pwodwi &amp; Stòk</a>
+      <a href="kliyan.html"><i class="fa-solid fa-users"></i> Kliyan &amp; Founisè</a>
+      <a href="depans.html"><i class="fa-solid fa-money-bill-trend-up"></i> Depans</a>
+      <div class="menu-label">Analiz</div>
+      <a href="rapo.html"><i class="fa-solid fa-chart-line"></i> Rapò</a>
+      <div class="menu-label">Sistèm</div>
+      <a href="paramet.html"><i class="fa-solid fa-gear"></i> Paramèt &amp; Itilizatè</a>
+    </nav>
+    <div class="sidebar-footer">
+      <button class="btn-logout" data-logout><i class="fa-solid fa-right-from-bracket"></i> Dekonekte</button>
+    </div>
+  </aside>
+  <div class="sidebar-backdrop"></div>
+
+  <!-- MAIN -->
+  <div class="main">
+    <header class="topbar">
+      <div style="display:flex;align-items:center;gap:14px;">
+        <button class="hamburger"><i class="fa-solid fa-bars"></i></button>
+        <h1><i class="fa-solid fa-gauge-high"></i> Dashboard Admin</h1>
+      </div>
+      <div class="topbar-right">
+        <button class="btn btn-light btn-sm" onclick="openModal('printerModal')" title="Enprimant">
+          <i class="fa-solid fa-print"></i> <span class="u-info">Enprimant</span>
+        </button>
+        <div class="user-chip">
+          <div class="avatar" data-user-avatar>?</div>
+          <div class="u-info"><b data-user-name>—</b><small data-user-role>—</small></div>
+          <i class="fa-solid fa-chevron-down" style="font-size:11px;color:#64748b;"></i>
+          <div class="dropdown">
+            <a href="paramet.html"><i class="fa-solid fa-gear"></i> Paramèt</a>
+            <a href="#" class="danger" data-logout><i class="fa-solid fa-right-from-bracket"></i> Dekonekte</a>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="content">
+      <!-- STAT CARDS -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon green"><i class="fa-solid fa-sack-dollar"></i></div>
+          <div class="stat-info"><h3 id="stLavant">—</h3><p>Lavant Jodi a</p></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon blue"><i class="fa-solid fa-chart-line"></i></div>
+          <div class="stat-info"><h3 id="stPwofi">—</h3><p>Pwofi Jodi a</p></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon orange"><i class="fa-solid fa-receipt"></i></div>
+          <div class="stat-info"><h3 id="stTranz">—</h3><p>Tranzaksyon Jodi a</p></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon red"><i class="fa-solid fa-triangle-exclamation"></i></div>
+          <div class="stat-info"><h3 id="stStokBa">—</h3><p>Pwodwi Stòk Ba</p></div>
+        </div>
+      </div>
+
+      <!-- GRAFIK -->
+      <div class="grid-3-2">
+        <div class="card">
+          <div class="card-header"><h3><i class="fa-solid fa-chart-area"></i> Lavant 7 Dènye Jou</h3></div>
+          <div class="card-body"><div class="chart-box"><canvas id="chartLavant"></canvas></div></div>
+        </div>
+        <div class="card">
+          <div class="card-header"><h3><i class="fa-solid fa-chart-pie"></i> Pwodwi pa Kategori</h3></div>
+          <div class="card-body"><div class="chart-box"><canvas id="chartKategori"></canvas></div></div>
+        </div>
+      </div>
+
+      <div class="grid-3-2">
+        <!-- DÈNYE TRANZAKSYON -->
+        <div class="card">
+          <div class="card-header">
+            <h3><i class="fa-solid fa-clock-rotate-left"></i> Dènye 5 Tranzaksyon</h3>
+            <a href="rapo.html" class="btn btn-light btn-sm">Wè Tout <i class="fa-solid fa-arrow-right"></i></a>
+          </div>
+          <div class="table-wrap">
+            <table class="tbl">
+              <thead><tr><th># Fakti</th><th>Kliyan</th><th>Kesye</th><th>Total</th><th>Estati</th></tr></thead>
+              <tbody id="tblDenye"><tr><td colspan="5"><div class="spinner"></div></td></tr></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div>
+          <!-- AKSYON RAPID -->
+          <div class="card">
+            <div class="card-header"><h3><i class="fa-solid fa-bolt"></i> Aksyon Rapid</h3></div>
+            <div class="card-body" style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+              <a href="pwodwi.html" class="btn btn-primary"><i class="fa-solid fa-plus"></i> Pwodwi</a>
+              <a href="kliyan.html" class="btn btn-info"><i class="fa-solid fa-user-plus"></i> Kliyan</a>
+              <a href="depans.html" class="btn btn-secondary"><i class="fa-solid fa-money-bill"></i> Depans</a>
+              <a href="rapo.html" class="btn btn-success"><i class="fa-solid fa-chart-line"></i> Rapò</a>
+            </div>
+          </div>
+
+          <!-- ALÈT STÒK -->
+          <div class="card">
+            <div class="card-header"><h3><i class="fa-solid fa-triangle-exclamation" style="color:var(--danger);"></i> Alèt Stòk</h3></div>
+            <div class="card-body" id="aletStok"><div class="spinner"></div></div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<!-- MODAL ENPRIMANT 3NSTAR RPT006 -->
+<div class="modal-overlay" id="printerModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h3><i class="fa-solid fa-print"></i> Enprimant 3nStar RPT006</h3>
+      <button class="modal-close" onclick="closeModal('printerModal')"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div class="modal-body">
+      <p style="font-size:14px;color:var(--text-muted);margin-bottom:16px;">
+        Chwazi mòd koneksyon enprimant tèmal 80mm ou a. Si li pa disponib,
+        sistèm nan ap itilize enpresyon navigatè a (window.print) otomatikman.
+      </p>
+      <div style="display:grid;gap:12px;">
+        <button class="btn btn-light" onclick="connectPrinter('usb')"><i class="fa-brands fa-usb"></i> Koneksyon USB</button>
+        <button class="btn btn-light" onclick="connectPrinter('bluetooth')"><i class="fa-brands fa-bluetooth-b"></i> Koneksyon Bluetooth</button>
+        <button class="btn btn-light" onclick="connectPrinter('serial')"><i class="fa-solid fa-plug"></i> Koneksyon Serial (COM)</button>
+      </div>
+      <div id="printerStatus" style="margin-top:16px;font-size:13.5px;"></div>
+    </div>
+  </div>
+</div>
+
+<script src="assets/js/app.js"></script>
+<script>
+let user = null;
+
+(async () => {
+  user = await requireRole(['Admin']);
+  if (!user) return;
+  initShell(user);
+  loadDashboard();
+})();
+
+async function loadDashboard() {
+  const res = await api('reports.php?type=dashboard');
+  if (!res.success) { toast(res.message, 'error'); return; }
+  const d = res.data;
+
+  document.getElementById('stLavant').textContent = money(d.lavant_jodi);
+  document.getElementById('stPwofi').textContent = money(d.pwofi_jodi);
+  document.getElementById('stTranz').textContent = d.tranzaksyon_jodi;
+  document.getElementById('stStokBa').textContent = d.stok_ba;
+
+  // Grafik lavant 7 jou (line)
+  const days = [];
+  const map = {};
+  d.lavant_7jou.forEach(r => map[r.jou] = Number(r.total));
+  for (let i = 6; i >= 0; i--) {
+    const dt = new Date(); dt.setDate(dt.getDate() - i);
+    const key = dt.toISOString().slice(0, 10);
+    days.push({ label: dt.toLocaleDateString('fr-FR', { weekday: 'short', day: 'numeric' }), val: map[key] || 0 });
+  }
+  new Chart(document.getElementById('chartLavant'), {
+    type: 'line',
+    data: {
+      labels: days.map(x => x.label),
+      datasets: [{
+        label: 'Lavant (HTG)',
+        data: days.map(x => x.val),
+        borderColor: '#1e3a8a',
+        backgroundColor: 'rgba(30,58,138,.12)',
+        fill: true, tension: .4, pointBackgroundColor: '#f59e0b', pointRadius: 5
+      }]
+    },
+    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
+  });
+
+  // Grafik kategori (doughnut)
+  new Chart(document.getElementById('chartKategori'), {
+    type: 'doughnut',
+    data: {
+      labels: d.pa_kategori.map(k => `${k.icon} ${k.non}`),
+      datasets: [{
+        data: d.pa_kategori.map(k => Number(k.kantite)),
+        backgroundColor: ['#1e3a8a', '#f59e0b', '#10b981', '#ef4444', '#3b82f6', '#7c3aed']
+      }]
+    },
+    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom' } } }
+  });
+
+  // Dènye tranzaksyon
+  const badges = { konplete: 'badge-success', anile: 'badge-danger', retounen: 'badge-warning' };
+  const labels = { konplete: 'Konplete', anile: 'Anile', retounen: 'Retounen' };
+  document.getElementById('tblDenye').innerHTML = d.denye_tranzaksyon.length
+    ? d.denye_tranzaksyon.map(s => `
+        <tr>
+          <td><b>${esc(s.nimewo_fakti)}</b></td>
+          <td>${esc(s.client_non)}</td>
+          <td>${esc(s.user_non || '—')}</td>
+          <td><b>${money(s.total)}</b></td>
+          <td><span class="badge ${badges[s.estati]}">${labels[s.estati]}</span></td>
+        </tr>`).join('')
+    : `<tr><td colspan="5"><div class="empty-state"><i class="fa-solid fa-receipt"></i><p>Poko gen tranzaksyon.</p></div></td></tr>`;
+
+  // Alèt stòk
+  document.getElementById('aletStok').innerHTML = d.alet_stok.length
+    ? d.alet_stok.map(p => `
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid var(--border);">
+          <span>${p.icon} ${esc(p.non)}</span>
+          <span class="badge ${p.stok == 0 ? 'badge-danger' : 'badge-warning'}">${p.stok == 0 ? 'Epwize' : 'Rete ' + p.stok}</span>
+        </div>`).join('')
+    : `<div class="empty-state"><i class="fa-solid fa-circle-check"></i><p>Tout stòk anfòm! 🎉</p></div>`;
+}
+
+// Koneksyon enprimant 3nStar RPT006
+async function connectPrinter(mode) {
+  const status = document.getElementById('printerStatus');
+  status.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Ap eseye konekte (${mode})...`;
+  try {
+    if (mode === 'usb' && navigator.usb) {
+      const device = await navigator.usb.requestDevice({ filters: [] });
+      localStorage.setItem('dk_printer', 'usb');
+      status.innerHTML = `<span style="color:var(--success);"><i class="fa-solid fa-circle-check"></i> Konekte ak ${device.productName || 'enprimant USB'}!</span>`;
+      toast('Enprimant konekte!', 'success');
+    } else if (mode === 'bluetooth' && navigator.bluetooth) {
+      const device = await navigator.bluetooth.requestDevice({ acceptAllDevices: true });
+      localStorage.setItem('dk_printer', 'bluetooth');
+      status.innerHTML = `<span style="color:var(--success);"><i class="fa-solid fa-circle-check"></i> Konekte ak ${device.name || 'enprimant Bluetooth'}!</span>`;
+      toast('Enprimant konekte!', 'success');
+    } else if (mode === 'serial' && navigator.serial) {
+      await navigator.serial.requestPort();
+      localStorage.setItem('dk_printer', 'serial');
+      status.innerHTML = `<span style="color:var(--success);"><i class="fa-solid fa-circle-check"></i> Pò serial konekte!</span>`;
+      toast('Enprimant konekte!', 'success');
+    } else {
+      status.innerHTML = `<span style="color:var(--warning);"><i class="fa-solid fa-triangle-exclamation"></i>
+        Navigatè a pa sipòte mòd sa a. Sistèm nan ap itilize window.print() kòm fallback.</span>`;
+    }
+  } catch (e) {
+    status.innerHTML = `<span style="color:var(--danger);"><i class="fa-solid fa-circle-xmark"></i> Koneksyon anile oswa echwe. Fallback: window.print().</span>`;
+  }
+}
+</script>
+</body>
+</html>

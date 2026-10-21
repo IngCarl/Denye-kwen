@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="ht">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Depans — DENYE KWEN</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+<div class="layout">
+
+  <aside class="sidebar">
+    <div class="sidebar-brand">
+      <div class="logo"><i class="fa-solid fa-store"></i></div>
+      <div><h2>DENYE KWEN</h2><small>Panèl Admin · v2.0</small></div>
+    </div>
+    <nav class="sidebar-menu">
+      <div class="menu-label">Meni Prensipal</div>
+      <a href="admin.html"><i class="fa-solid fa-gauge-high"></i> Dashboard</a>
+      <a href="pwodwi.html"><i class="fa-solid fa-boxes-stacked"></i> Pwodwi &amp; Stòk</a>
+      <a href="kliyan.html"><i class="fa-solid fa-users"></i> Kliyan &amp; Founisè</a>
+      <a href="depans.html" class="active"><i class="fa-solid fa-money-bill-trend-up"></i> Depans</a>
+      <div class="menu-label">Analiz</div>
+      <a href="rapo.html"><i class="fa-solid fa-chart-line"></i> Rapò</a>
+      <div class="menu-label">Sistèm</div>
+      <a href="paramet.html"><i class="fa-solid fa-gear"></i> Paramèt &amp; Itilizatè</a>
+    </nav>
+    <div class="sidebar-footer">
+      <button class="btn-logout" data-logout><i class="fa-solid fa-right-from-bracket"></i> Dekonekte</button>
+    </div>
+  </aside>
+  <div class="sidebar-backdrop"></div>
+
+  <div class="main">
+    <header class="topbar">
+      <div style="display:flex;align-items:center;gap:14px;">
+        <button class="hamburger"><i class="fa-solid fa-bars"></i></button>
+        <h1><i class="fa-solid fa-money-bill-trend-up"></i> Jesyon Depans</h1>
+      </div>
+      <div class="topbar-right">
+        <button class="btn btn-primary" onclick="openExpModal()"><i class="fa-solid fa-plus"></i> Nouvo Depans</button>
+        <div class="user-chip">
+          <div class="avatar" data-user-avatar>?</div>
+          <div class="u-info"><b data-user-name>—</b><small data-user-role>—</small></div>
+          <div class="dropdown">
+            <a href="#" class="danger" data-logout><i class="fa-solid fa-right-from-bracket"></i> Dekonekte</a>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="content">
+      <div class="stats-grid" style="grid-template-columns:repeat(auto-fit,minmax(230px,1fr));">
+        <div class="stat-card">
+          <div class="stat-icon orange"><i class="fa-solid fa-calendar-day"></i></div>
+          <div class="stat-info"><h3 id="stJodi">—</h3><p>Depans Jodi a</p></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon blue"><i class="fa-solid fa-calendar"></i></div>
+          <div class="stat-info"><h3 id="stMwa">—</h3><p>Depans Mwa Sa</p></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon red"><i class="fa-solid fa-money-bill-wave"></i></div>
+          <div class="stat-info"><h3 id="stTotal">—</h3><p>Total Depans</p></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header"><h3><i class="fa-solid fa-list"></i> Lis Depans</h3></div>
+        <div class="table-wrap">
+          <table class="tbl">
+            <thead><tr><th>Dat</th><th>Kategori</th><th>Deskripsyon</th><th>Mwayen</th><th>Montan</th><th>Aksyon</th></tr></thead>
+            <tbody id="tblExp"><tr><td colspan="6"><div class="spinner"></div></td></tr></tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<!-- MODAL DEPANS -->
+<div class="modal-overlay" id="expModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 id="expModalTitle"><i class="fa-solid fa-plus"></i> Nouvo Depans</h3>
+      <button class="modal-close" onclick="closeModal('expModal')"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <form id="expForm">
+      <div class="modal-body">
+        <input type="hidden" id="eId">
+        <div class="form-row">
+          <div class="form-group">
+            <label>Kategori <span class="req">*</span></label>
+            <select id="eKat" class="form-control" required>
+              <option value="Lwaye">🏠 Lwaye</option>
+              <option value="Elektrisite">⚡ Elektrisite</option>
+              <option value="Dlo">💧 Dlo</option>
+              <option value="Transpò">🚚 Transpò</option>
+              <option value="Salè">👥 Salè</option>
+              <option value="Acha Machandiz">📦 Acha Machandiz</option>
+              <option value="Reparasyon">🔧 Reparasyon</option>
+              <option value="Lòt">📌 Lòt</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Dat <span class="req">*</span></label>
+            <input type="date" id="eDat" class="form-control" required>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Deskripsyon</label>
+          <input type="text" id="eDesk" class="form-control" placeholder="Ex: Faktè EDH mwa jen">
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Montan (HTG) <span class="req">*</span></label>
+            <input type="number" id="eMontan" class="form-control" min="0" step="any" required>
+          </div>
+          <div class="form-group">
+            <label>Mwayen peman</label>
+            <select id="eMwayen" class="form-control">
+              <option value="kach">💵 Kach</option>
+              <option value="moncash">📱 MonCash</option>
+              <option value="natcash">📲 NatCash</option>
+              <option value="chek">🧾 Chèk</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-light" onclick="closeModal('expModal')">Anile</button>
+        <button type="submit" class="btn btn-primary"><i class="fa-solid fa-floppy-disk"></i> Anrejistre</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script src="assets/js/app.js"></script>
+<script>
+let expenses = [];
+const katIcons = { 'Lwaye':'🏠','Elektrisite':'⚡','Dlo':'💧','Transpò':'🚚','Salè':'👥','Acha Machandiz':'📦','Reparasyon':'🔧','Lòt':'📌' };
+
+(async () => {
+  const user = await requireRole(['Admin']);
+  if (!user) return;
+  initShell(user);
+  loadExpenses();
+})();
+
+async function loadExpenses() {
+  const [listRes, statRes] = await Promise.all([
+    api('expenses.php'),
+    api('expenses.php?stats=1')
+  ]);
+
+  if (statRes.success) {
+    document.getElementById('stJodi').textContent = money(statRes.data.jodi);
+    document.getElementById('stMwa').textContent = money(statRes.data.mwa);
+    document.getElementById('stTotal').textContent = money(statRes.data.total);
+  }
+
+  if (listRes.success) {
+    expenses = listRes.data;
+    document.getElementById('tblExp').innerHTML = expenses.length
+      ? expenses.map(e => `
+          <tr>
+            <td>${fmtDateOnly(e.dat)}</td>
+            <td>${katIcons[e.kategori] || '📌'} <b>${esc(e.kategori)}</b></td>
+            <td>${esc(e.deskripsyon || '—')}</td>
+            <td>${esc(e.mwayen_peman)}</td>
+            <td><b style="color:var(--danger);">${money(e.montan)}</b></td>
+            <td class="actions">
+              <button class="btn btn-info btn-icon" onclick="openExpModal(${e.id})"><i class="fa-solid fa-pen"></i></button>
+              <button class="btn btn-danger btn-icon" onclick="deleteExp(${e.id})"><i class="fa-solid fa-trash"></i></button>
+            </td>
+          </tr>`).join('')
+      : `<tr><td colspan="6"><div class="empty-state"><i class="fa-solid fa-money-bill"></i><p>Poko gen depans anrejistre.</p></div></td></tr>`;
+  }
+}
+
+function openExpModal(id) {
+  document.getElementById('expForm').reset();
+  document.getElementById('eId').value = '';
+  document.getElementById('eDat').value = new Date().toISOString().slice(0, 10);
+  document.getElementById('expModalTitle').innerHTML = '<i class="fa-solid fa-plus"></i> Nouvo Depans';
+  if (id) {
+    const e = expenses.find(x => x.id == id);
+    if (e) {
+      document.getElementById('expModalTitle').innerHTML = '<i class="fa-solid fa-pen"></i> Modifye Depans';
+      document.getElementById('eId').value = e.id;
+      document.getElementById('eKat').value = e.kategori;
+      document.getElementById('eDat').value = e.dat;
+      document.getElementById('eDesk').value = e.deskripsyon || '';
+      document.getElementById('eMontan').value = e.montan;
+      document.getElementById('eMwayen').value = e.mwayen_peman;
+    }
+  }
+  openModal('expModal');
+}
+
+document.getElementById('expForm').addEventListener('submit', async e => {
+  e.preventDefault();
+  const id = document.getElementById('eId').value;
+  const res = await api('expenses.php', id ? 'PUT' : 'POST', {
+    id: id || undefined,
+    kategori: document.getElementById('eKat').value,
+    dat: document.getElementById('eDat').value,
+    deskripsyon: document.getElementById('eDesk').value.trim(),
+    montan: Number(document.getElementById('eMontan').value),
+    mwayen_peman: document.getElementById('eMwayen').value
+  });
+  if (res.success) { toast(res.message, 'success'); closeModal('expModal'); loadExpenses(); }
+  else toast(res.message, 'error');
+});
+
+async function deleteExp(id) {
+  if (!confirmAction('Èske ou sèten ou vle efase depans sa a?')) return;
+  const res = await api('expenses.php?id=' + id, 'DELETE');
+  if (res.success) { toast(res.message, 'success'); loadExpenses(); }
+  else toast(res.message, 'error');
+}
+</script>
+</body>
+</html>

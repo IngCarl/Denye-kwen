@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="ht">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard Kesye — DENYE KWEN</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link rel="stylesheet" href="assets/css/style.css">
+<style>
+  body { background: linear-gradient(135deg, #1e3a8a 0%, #172c69 60%, #0f1d47 100%); min-height: 100vh; }
+  .kesye-wrap { max-width: 1100px; margin: 0 auto; padding: 26px 18px 50px; }
+  .kesye-header {
+    display: flex; align-items: center; justify-content: space-between;
+    flex-wrap: wrap; gap: 16px;
+    background: rgba(255,255,255,.08);
+    border: 1px solid rgba(255,255,255,.15);
+    border-radius: 18px;
+    padding: 20px 26px;
+    color: #fff;
+    margin-bottom: 24px;
+    backdrop-filter: blur(6px);
+  }
+  .kesye-header .left { display: flex; align-items: center; gap: 16px; }
+  .kesye-header .avatar { width: 56px; height: 56px; font-size: 20px; background: linear-gradient(135deg, #f59e0b, #d97706); }
+  .kesye-header h2 { font-size: 20px; }
+  .kesye-header small { opacity: .75; }
+  #clock { font-size: 26px; font-weight: 700; font-variant-numeric: tabular-nums; }
+  #clockDate { font-size: 13px; opacity: .75; text-align: right; }
+  .big-sell {
+    display: flex; align-items: center; justify-content: center; gap: 16px;
+    width: 100%;
+    padding: 30px;
+    margin: 24px 0;
+    background: linear-gradient(135deg, #10b981, #059669);
+    color: #fff;
+    border: none; border-radius: 20px;
+    font-size: 26px; font-weight: 800; letter-spacing: 1px;
+    box-shadow: 0 14px 34px rgba(16,185,129,.4);
+    transition: all .3s;
+  }
+  .big-sell:hover { transform: translateY(-4px) scale(1.01); box-shadow: 0 20px 44px rgba(16,185,129,.5); }
+  .big-sell i { font-size: 32px; }
+  .quick-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px; }
+  .quick-card {
+    background: rgba(255,255,255,.08);
+    border: 1px solid rgba(255,255,255,.15);
+    border-radius: 16px;
+    padding: 22px;
+    color: #fff; text-align: center;
+    cursor: pointer;
+    transition: all .3s;
+  }
+  .quick-card:hover { background: rgba(255,255,255,.16); transform: translateY(-3px); }
+  .quick-card i { font-size: 28px; margin-bottom: 10px; color: #f59e0b; }
+  .stats-grid .stat-card { background: rgba(255,255,255,.95); }
+  .sales-card { background: rgba(255,255,255,.97); border-radius: 16px; overflow: hidden; box-shadow: var(--shadow-lg); }
+  .logout-top { background: rgba(239,68,68,.2); border: 1px solid rgba(239,68,68,.5); color: #fecaca; padding: 10px 16px; border-radius: 10px; transition: all .3s; }
+  .logout-top:hover { background: #ef4444; color: #fff; }
+  @media (max-width: 576px) { .quick-grid { grid-template-columns: 1fr; } .big-sell { font-size: 20px; padding: 22px; } }
+</style>
+</head>
+<body>
+
+<div class="kesye-wrap">
+  <!-- HEADER -->
+  <div class="kesye-header">
+    <div class="left">
+      <div class="avatar" data-user-avatar>?</div>
+      <div>
+        <h2 data-user-name>—</h2>
+        <small><i class="fa-solid fa-cash-register"></i> Kesye · DENYE KWEN</small>
+      </div>
+    </div>
+    <div style="display:flex;align-items:center;gap:18px;">
+      <div>
+        <div id="clock">--:--:--</div>
+        <div id="clockDate">—</div>
+      </div>
+      <button class="logout-top" data-logout><i class="fa-solid fa-right-from-bracket"></i></button>
+    </div>
+  </div>
+
+  <!-- STAT CARDS -->
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-icon green"><i class="fa-solid fa-sack-dollar"></i></div>
+      <div class="stat-info"><h3 id="stVant">—</h3><p>Vant Mwen Jodi a</p></div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon blue"><i class="fa-solid fa-receipt"></i></div>
+      <div class="stat-info"><h3 id="stTranz">—</h3><p>Tranzaksyon</p></div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon orange"><i class="fa-solid fa-users"></i></div>
+      <div class="stat-info"><h3 id="stKliyan">—</h3><p>Kliyan Sèvi</p></div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon purple"><i class="fa-solid fa-clock"></i></div>
+      <div class="stat-info"><h3 id="stEdtan">—</h3><p>Èdtan Travay</p></div>
+    </div>
+  </div>
+
+  <!-- GWO BOUTON VANN -->
+  <button class="big-sell" onclick="window.location.href='pos.html'">
+    <i class="fa-solid fa-cash-register"></i> KÒMANSE VANN
+  </button>
+
+  <!-- AKSYON RAPID -->
+  <div class="quick-grid" style="grid-template-columns:1fr 1fr 1fr;">
+    <div class="quick-card" onclick="window.location.href='kliyan.html'">
+      <i class="fa-solid fa-users"></i>
+      <h3>Kliyan</h3>
+      <p style="opacity:.7;font-size:13px;margin-top:4px;">Jere lis kliyan yo</p>
+    </div>
+    <div class="quick-card" onclick="openServiceModal()">
+      <i class="fa-solid fa-handshake"></i>
+      <h3>Sèvis</h3>
+      <p style="opacity:.7;font-size:13px;margin-top:4px;">Anrejistre yon sèvis</p>
+    </div>
+    <div class="quick-card" onclick="fermenKes()">
+      <i class="fa-solid fa-lock"></i>
+      <h3>Fèmen Kès</h3>
+      <p style="opacity:.7;font-size:13px;margin-top:4px;">Rezime jounen an epi dekonekte</p>
+    </div>
+  </div>
+
+  <!-- SEKSYON SÈVIS -->
+  <div class="sales-card" style="margin-bottom:24px;">
+    <div class="card-header">
+      <h3><i class="fa-solid fa-handshake"></i> Sèvis Mwen</h3>
+      <div style="display:flex;align-items:center;gap:10px;">
+        <span class="badge badge-success" id="svcStatBadge">Jodi a: 0.00 HTG</span>
+        <button class="btn btn-success btn-sm" onclick="openServiceModal()"><i class="fa-solid fa-plus"></i> Nouvo Sèvis</button>
+      </div>
+    </div>
+    <div class="table-wrap">
+      <table class="tbl">
+        <thead><tr><th># Resi</th><th>Deskripsyon</th><th>Moun kap bay sèvis</th><th>Jou / Dat</th><th>Pri</th><th>Rabè</th><th>Total</th><th>Aksyon</th></tr></thead>
+        <tbody id="tblSevis"><tr><td colspan="8"><div class="spinner"></div></td></tr></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- DÈNYE VANT -->
+  <div class="sales-card">
+    <div class="card-header">
+      <h3><i class="fa-solid fa-clock-rotate-left"></i> Dènye 5 Vant Mwen</h3>
+      <span class="badge badge-info"><i class="fa-solid fa-rotate"></i> Auto-refresh 30s</span>
+    </div>
+    <div class="table-wrap">
+      <table class="tbl">
+        <thead><tr><th># Fakti</th><th>Kliyan</th><th>Total</th><th>Peman</th><th>Lè</th></tr></thead>
+        <tbody id="tblVant"><tr><td colspan="5"><div class="spinner"></div></td></tr></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ========== MODAL FÒM SÈVIS ========== -->
+<div class="modal-overlay" id="serviceModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h3><i class="fa-solid fa-handshake"></i> Nouvo Sèvis</h3>
+      <button class="modal-close" onclick="closeModal('serviceModal')"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <form id="serviceForm">
+      <div class="modal-body">
+        <div class="form-group">
+          <label>Deskripsyon sèvis la <span class="req" style="color:var(--danger);">*</span></label>
+          <input type="text" id="svDesk" class="form-control" required placeholder="Ex: Livrezon machandiz, rechaj, reparasyon...">
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Pri sèvis la (HTG) <span class="req" style="color:var(--danger);">*</span></label>
+            <input type="number" id="svPri" class="form-control" min="1" step="any" required>
+          </div>
+          <div class="form-group">
+            <label>Rabè (HTG) — opsyonèl</label>
+            <input type="number" id="svRabe" class="form-control" min="0" step="any" placeholder="0">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Kiyès kap bay sèvis la <span class="req" style="color:var(--danger);">*</span></label>
+          <input type="text" id="svMoun" class="form-control" required placeholder="Non moun nan">
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Jou</label>
+            <select id="svJou" class="form-control">
+              <option value="Lendi">Lendi</option>
+              <option value="Madi">Madi</option>
+              <option value="Mèkredi">Mèkredi</option>
+              <option value="Jedi">Jedi</option>
+              <option value="Vandredi">Vandredi</option>
+              <option value="Samdi">Samdi</option>
+              <option value="Dimanch">Dimanch</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Dat <span class="req" style="color:var(--danger);">*</span></label>
+            <input type="date" id="svDat" class="form-control" required>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Mwayen peman</label>
+          <select id="svMwayen" class="form-control">
+            <option value="kach">💵 Kach</option>
+            <option value="moncash">📱 MonCash</option>
+            <option value="natcash">📲 NatCash</option>
+            <option value="kat">💳 Kat</option>
+          </select>
+        </div>
+        <!-- REZIME AK DEDIKSYON OTOMATIK -->
+        <div style="background:#f1f5f9;border-radius:12px;padding:14px 18px;">
+          <div style="display:flex;justify-content:space-between;font-size:14px;margin-bottom:6px;">
+            <span>Pri sèvis</span><b id="svShowPri">0.00 HTG</b>
+          </div>
+          <div style="display:flex;justify-content:space-between;font-size:14px;margin-bottom:6px;color:var(--danger);">
+            <span>Rabè (dediksyon)</span><b id="svShowRabe">− 0.00 HTG</b>
+          </div>
+          <div style="display:flex;justify-content:space-between;font-size:18px;font-weight:800;color:var(--primary);border-top:1px dashed #cbd5e1;padding-top:8px;">
+            <span>TOTAL POU PEYE</span><span id="svShowTotal">0.00 HTG</span>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-light" onclick="closeModal('serviceModal')">Anile</button>
+        <button type="submit" class="btn btn-success" id="btnSvSave"><i class="fa-solid fa-check"></i> Anrejistre Sèvis la</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- ========== MODAL RESI SÈVIS (80mm) ========== -->
+<div class="modal-overlay" id="svcReceiptModal">
+  <div class="modal modal-sm">
+    <div class="modal-header no-print">
+      <h3><i class="fa-solid fa-receipt"></i> Resi Sèvis</h3>
+      <button class="modal-close" onclick="closeModal('svcReceiptModal')"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div class="modal-body">
+      <div class="print-area" id="svcReceiptContent"
+           style="font-family:'Courier New',monospace;font-size:12.5px;color:#000;max-width:300px;margin:0 auto;"></div>
+    </div>
+    <div class="modal-footer no-print">
+      <button class="btn btn-light" onclick="closeModal('svcReceiptModal')">Fèmen</button>
+      <button class="btn btn-primary" onclick="window.print()"><i class="fa-solid fa-print"></i> Enprime</button>
+    </div>
+  </div>
+</div>
+
+<script src="assets/js/app.js"></script>
+<script>
+let user = null;
+let loginTime = null;
+let services = [];
+let bizSettings = {};
+
+(async () => {
+  user = await requireRole(['Kesye']);
+  if (!user) return;
+  initShell(user);
+
+  // Lè kòmansman sesyon (pou èdtan travay)
+  loginTime = sessionStorage.getItem('dk_login_time');
+  if (!loginTime) { loginTime = Date.now(); sessionStorage.setItem('dk_login_time', loginTime); }
+
+  startClock();
+  loadStats();
+  loadServices();
+  loadBizSettings();
+  setInterval(() => { loadStats(); loadServices(); }, 30000); // auto-refresh chak 30 segonn
+})();
+
+async function loadBizSettings() {
+  const res = await api('settings.php');
+  if (res.success && res.data) bizSettings = res.data;
+}
+
+// Òlaj tan reyèl
+function startClock() {
+  const tick = () => {
+    const now = new Date();
+    document.getElementById('clock').textContent = now.toLocaleTimeString('fr-FR');
+    document.getElementById('clockDate').textContent =
+      now.toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+    // Èdtan travay
+    const ms = Date.now() - Number(loginTime);
+    const h = Math.floor(ms / 3600000), m = Math.floor((ms % 3600000) / 60000);
+    document.getElementById('stEdtan').textContent = `${h}è ${m}min`;
+  };
+  tick();
+  setInterval(tick, 1000);
+}
+
+async function loadStats() {
+  const [stats, sales] = await Promise.all([
+    api('sales.php?kesye_stats=1'),
+    api('sales.php?limit=5')
+  ]);
+
+  if (stats.success) {
+    document.getElementById('stVant').textContent = money(stats.data.total);
+    document.getElementById('stTranz').textContent = stats.data.tranzaksyon;
+    document.getElementById('stKliyan').textContent = stats.data.kliyan;
+  }
+
+  if (sales.success) {
+    const icons = { kach: '💵', moncash: '📱', natcash: '📲', kat: '💳', kredi: '📒' };
+    document.getElementById('tblVant').innerHTML = sales.data.length
+      ? sales.data.map(s => `
+          <tr>
+            <td><b>${esc(s.nimewo_fakti)}</b></td>
+            <td>${esc(s.client_non)}</td>
+            <td><b>${money(s.total)}</b></td>
+            <td>${icons[s.mwayen_peman] || ''} ${esc(s.mwayen_peman)}</td>
+            <td>${fmtDate(s.dat)}</td>
+          </tr>`).join('')
+      : `<tr><td colspan="5"><div class="empty-state"><i class="fa-solid fa-receipt"></i><p>Poko gen vant jodi a. Kòmanse vann!</p></div></td></tr>`;
+  }
+}
+
+// ============ SÈVIS ============
+async function loadServices() {
+  const [listRes, statRes] = await Promise.all([
+    api('services.php?limit=10'),
+    api('services.php?kesye_stats=1')
+  ]);
+
+  if (statRes.success) {
+    document.getElementById('svcStatBadge').textContent =
+      `Jodi a: ${money(statRes.data.total)} (${statRes.data.kantite})`;
+  }
+
+  if (listRes.success) {
+    services = listRes.data;
+    document.getElementById('tblSevis').innerHTML = services.length
+      ? services.map(s => `
+          <tr>
+            <td><b>${esc(s.nimewo_resi)}</b></td>
+            <td>${esc(s.deskripsyon)}</td>
+            <td>${esc(s.moun_bay_sevis)}</td>
+            <td>${esc(s.jou || '—')} · ${fmtDateOnly(s.dat)}</td>
+            <td>${money(s.pri)}</td>
+            <td style="color:var(--danger);">${Number(s.rabe) > 0 ? '− ' + money(s.rabe) : '—'}</td>
+            <td><b>${money(s.total)}</b></td>
+            <td>
+              <button class="btn btn-info btn-icon" title="Wè resi" onclick="showServiceReceipt(${s.id})">
+                <i class="fa-solid fa-receipt"></i>
+              </button>
+            </td>
+          </tr>`).join('')
+      : `<tr><td colspan="8"><div class="empty-state"><i class="fa-solid fa-handshake"></i><p>Poko gen sèvis anrejistre. Klike "Nouvo Sèvis" pou kòmanse.</p></div></td></tr>`;
+  }
+}
+
+function openServiceModal() {
+  document.getElementById('serviceForm').reset();
+  const now = new Date();
+  document.getElementById('svDat').value = now.toLocaleDateString('sv-SE');
+  // Chwazi jou aktyèl la otomatikman
+  const jours = ['Dimanch','Lendi','Madi','Mèkredi','Jedi','Vandredi','Samdi'];
+  document.getElementById('svJou').value = jours[now.getDay()];
+  updateSvcSummary();
+  openModal('serviceModal');
+  setTimeout(() => document.getElementById('svDesk').focus(), 200);
+}
+
+// Lè dat la chanje, mete jou a ajou otomatikman
+document.getElementById('svDat').addEventListener('change', e => {
+  if (!e.target.value) return;
+  const jours = ['Dimanch','Lendi','Madi','Mèkredi','Jedi','Vandredi','Samdi'];
+  const d = new Date(e.target.value + 'T12:00:00');
+  document.getElementById('svJou').value = jours[d.getDay()];
+});
+
+// Rezime ak DEDIKSYON OTOMATIK rabè a
+function updateSvcSummary() {
+  const pri = Number(document.getElementById('svPri').value) || 0;
+  let rabe = Number(document.getElementById('svRabe').value) || 0;
+  if (rabe > pri) {
+    rabe = pri;
+    document.getElementById('svRabe').value = pri;
+    toast('Rabè a pa ka pi gran pase pri sèvis la.', 'warning');
+  }
+  document.getElementById('svShowPri').textContent = money(pri);
+  document.getElementById('svShowRabe').textContent = '− ' + money(rabe);
+  document.getElementById('svShowTotal').textContent = money(pri - rabe);
+}
+document.getElementById('svPri').addEventListener('input', updateSvcSummary);
+document.getElementById('svRabe').addEventListener('input', updateSvcSummary);
+
+document.getElementById('serviceForm').addEventListener('submit', async e => {
+  e.preventDefault();
+  const btn = document.getElementById('btnSvSave');
+  btnLoading(btn, true, 'Ap anrejistre...');
+
+  const res = await api('services.php', 'POST', {
+    deskripsyon: document.getElementById('svDesk').value.trim(),
+    pri: Number(document.getElementById('svPri').value),
+    rabe: Number(document.getElementById('svRabe').value) || 0,   // opsyonèl — dediksyon fèt sou sèvè a tou
+    moun_bay_sevis: document.getElementById('svMoun').value.trim(),
+    jou: document.getElementById('svJou').value,
+    dat: document.getElementById('svDat').value,
+    mwayen_peman: document.getElementById('svMwayen').value
+  });
+
+  btnLoading(btn, false);
+
+  if (res.success) {
+    closeModal('serviceModal');
+    toast(res.message, 'success');
+    renderServiceReceipt(res.data);   // montre resi a otomatikman
+    loadServices();
+  } else {
+    toast(res.message, 'error');
+  }
+});
+
+// ============ RESI SÈVIS (80mm) ============
+function showServiceReceipt(id) {
+  const s = services.find(x => x.id == id);
+  if (s) renderServiceReceipt(s);
+}
+
+function renderServiceReceipt(s) {
+  const payLbl = { kach: 'Kach', moncash: 'MonCash', natcash: 'NatCash', kat: 'Kat' };
+  document.getElementById('svcReceiptContent').innerHTML = `
+    <div style="text-align:center;">
+      <div style="font-size:17px;font-weight:800;">${esc(bizSettings.business_name || 'DENYE KWEN')}</div>
+      <div>${esc(bizSettings.address || '')}</div>
+      <div>Tel: ${esc(bizSettings.phone || '')}</div>
+      ${bizSettings.nif ? `<div>NIF: ${esc(bizSettings.nif)}</div>` : ''}
+      <div style="margin-top:4px;font-weight:800;">*** RESI SÈVIS ***</div>
+    </div>
+    <hr style="border:none;border-top:1px dashed #000;margin:8px 0;">
+    <div>Resi: <b>${esc(s.nimewo_resi)}</b></div>
+    <div>Jou: ${esc(s.jou || '—')}</div>
+    <div>Dat sèvis: ${fmtDateOnly(s.dat)}</div>
+    <div>Anrejistre: ${fmtDate(s.dat_kreye)}</div>
+    <div>Kesye: ${esc(s.user_non || '')}</div>
+    <div>Bay pa: <b>${esc(s.moun_bay_sevis)}</b></div>
+    <hr style="border:none;border-top:1px dashed #000;margin:8px 0;">
+    <div style="font-weight:700;">SÈVIS:</div>
+    <div>${esc(s.deskripsyon)}</div>
+    <hr style="border:none;border-top:1px dashed #000;margin:8px 0;">
+    <table style="width:100%;border-collapse:collapse;">
+      <tr><td>Pri sèvis</td><td style="text-align:right;">${Number(s.pri).toFixed(2)}</td></tr>
+      ${Number(s.rabe) > 0 ? `<tr><td>Rabè</td><td style="text-align:right;">-${Number(s.rabe).toFixed(2)}</td></tr>` : ''}
+      <tr>
+        <td style="font-size:15px;font-weight:800;">TOTAL</td>
+        <td style="text-align:right;font-size:15px;font-weight:800;">${Number(s.total).toFixed(2)} HTG</td>
+      </tr>
+      <tr><td>Peman</td><td style="text-align:right;">${payLbl[s.mwayen_peman] || s.mwayen_peman}</td></tr>
+    </table>
+    <hr style="border:none;border-top:1px dashed #000;margin:8px 0;">
+    <div style="text-align:center;">${esc(bizSettings.receipt_footer || 'Mèsi pou konfyans ou!')}</div>
+    <div style="text-align:center;">--------------------------------</div>
+  `;
+  openModal('svcReceiptModal');
+}
+
+async function fermenKes() {
+  const stats = await api('sales.php?kesye_stats=1');
+  if (stats.success) {
+    const d = stats.data;
+    if (confirmAction(`REZIME JOUNEN AN\n\nTotal vant: ${money(d.total)}\nTranzaksyon: ${d.tranzaksyon}\nKliyan sèvi: ${d.kliyan}\n\nÈske ou vle fèmen kès la epi dekonekte?`)) {
+      sessionStorage.removeItem('dk_login_time');
+      logout();
+    }
+  }
+}
+</script>
+</body>
+</html>

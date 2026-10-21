@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="ht">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kliyan &amp; Founisè — DENYE KWEN</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+<div class="layout">
+
+  <aside class="sidebar" id="sidebarNav">
+    <div class="sidebar-brand">
+      <div class="logo"><i class="fa-solid fa-store"></i></div>
+      <div><h2>DENYE KWEN</h2><small id="brandRole">v2.0</small></div>
+    </div>
+    <nav class="sidebar-menu" id="sideMenu"><!-- jere pa wòl nan JS --></nav>
+    <div class="sidebar-footer">
+      <button class="btn-logout" data-logout><i class="fa-solid fa-right-from-bracket"></i> Dekonekte</button>
+    </div>
+  </aside>
+  <div class="sidebar-backdrop"></div>
+
+  <div class="main">
+    <header class="topbar">
+      <div style="display:flex;align-items:center;gap:14px;">
+        <button class="hamburger"><i class="fa-solid fa-bars"></i></button>
+        <h1><i class="fa-solid fa-users"></i> Kliyan &amp; Founisè</h1>
+      </div>
+      <div class="topbar-right">
+        <div class="user-chip">
+          <div class="avatar" data-user-avatar>?</div>
+          <div class="u-info"><b data-user-name>—</b><small data-user-role>—</small></div>
+          <div class="dropdown">
+            <a href="#" class="danger" data-logout><i class="fa-solid fa-right-from-bracket"></i> Dekonekte</a>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="content">
+      <div class="tabs">
+        <button class="tab-btn active" data-tab="kliyan"><i class="fa-solid fa-users"></i> Kliyan</button>
+        <button class="tab-btn" data-tab="founise" id="tabFounise" style="display:none;"><i class="fa-solid fa-truck-field"></i> Founisè</button>
+      </div>
+
+      <!-- TAB KLIYAN -->
+      <div class="tab-pane active" id="pane-kliyan">
+        <div class="card">
+          <div class="card-header">
+            <div class="search-bar">
+              <i class="fa-solid fa-magnifying-glass"></i>
+              <input type="text" id="searchClient" class="form-control" placeholder="Chèche kliyan...">
+            </div>
+            <button class="btn btn-primary" onclick="openClientModal()"><i class="fa-solid fa-user-plus"></i> Nouvo Kliyan</button>
+          </div>
+          <div class="table-wrap">
+            <table class="tbl">
+              <thead><tr><th>Kliyan</th><th>Telefòn</th><th>Imèl</th><th>Tip</th><th>Pwen</th><th>Aksyon</th></tr></thead>
+              <tbody id="tblClients"><tr><td colspan="6"><div class="spinner"></div></td></tr></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB FOUNISÈ (Admin sèlman) -->
+      <div class="tab-pane" id="pane-founise">
+        <div class="card">
+          <div class="card-header">
+            <div class="search-bar">
+              <i class="fa-solid fa-magnifying-glass"></i>
+              <input type="text" id="searchSupplier" class="form-control" placeholder="Chèche founisè...">
+            </div>
+            <button class="btn btn-primary" onclick="openSupplierModal()"><i class="fa-solid fa-plus"></i> Nouvo Founisè</button>
+          </div>
+          <div class="table-wrap">
+            <table class="tbl">
+              <thead><tr><th>Founisè</th><th>Konpayi</th><th>Telefòn</th><th>Imèl</th><th>NIF</th><th>Aksyon</th></tr></thead>
+              <tbody id="tblSuppliers"><tr><td colspan="6"><div class="spinner"></div></td></tr></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<!-- MODAL KLIYAN -->
+<div class="modal-overlay" id="clientModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 id="clientModalTitle"><i class="fa-solid fa-user-plus"></i> Nouvo Kliyan</h3>
+      <button class="modal-close" onclick="closeModal('clientModal')"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <form id="clientForm">
+      <div class="modal-body">
+        <input type="hidden" id="cId">
+        <div class="form-group">
+          <label>Non konplè <span class="req">*</span></label>
+          <input type="text" id="cNon" class="form-control" required>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Telefòn</label>
+            <input type="text" id="cTel" class="form-control" placeholder="+509 ...">
+          </div>
+          <div class="form-group">
+            <label>Imèl</label>
+            <input type="email" id="cEmail" class="form-control">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Adrès</label>
+            <input type="text" id="cAdres" class="form-control">
+          </div>
+          <div class="form-group">
+            <label>Vil</label>
+            <input type="text" id="cVil" class="form-control">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Tip kliyan</label>
+          <select id="cTip" class="form-control">
+            <option value="regilye">Regilye</option>
+            <option value="vip">VIP</option>
+            <option value="gwo">Gwo Kliyan</option>
+          </select>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-light" onclick="closeModal('clientModal')">Anile</button>
+        <button type="submit" class="btn btn-primary"><i class="fa-solid fa-floppy-disk"></i> Anrejistre</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- MODAL FOUNISÈ -->
+<div class="modal-overlay" id="supplierModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 id="supplierModalTitle"><i class="fa-solid fa-plus"></i> Nouvo Founisè</h3>
+      <button class="modal-close" onclick="closeModal('supplierModal')"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <form id="supplierForm">
+      <div class="modal-body">
+        <input type="hidden" id="sId">
+        <div class="form-row">
+          <div class="form-group">
+            <label>Non kontak <span class="req">*</span></label>
+            <input type="text" id="sNon" class="form-control" required>
+          </div>
+          <div class="form-group">
+            <label>Konpayi</label>
+            <input type="text" id="sKonpayi" class="form-control">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Telefòn</label>
+            <input type="text" id="sTel" class="form-control">
+          </div>
+          <div class="form-group">
+            <label>Imèl</label>
+            <input type="email" id="sEmail" class="form-control">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Adrès</label>
+            <input type="text" id="sAdres" class="form-control">
+          </div>
+          <div class="form-group">
+            <label>NIF</label>
+            <input type="text" id="sNif" class="form-control">
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-light" onclick="closeModal('supplierModal')">Anile</button>
+        <button type="submit" class="btn btn-primary"><i class="fa-solid fa-floppy-disk"></i> Anrejistre</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script src="assets/js/app.js"></script>
+<script>
+let user = null, clients = [], suppliers = [];
+
+const ADMIN_MENU = `
+  <div class="menu-label">Meni Prensipal</div>
+  <a href="admin.html"><i class="fa-solid fa-gauge-high"></i> Dashboard</a>
+  <a href="pwodwi.html"><i class="fa-solid fa-boxes-stacked"></i> Pwodwi &amp; Stòk</a>
+  <a href="kliyan.html" class="active"><i class="fa-solid fa-users"></i> Kliyan &amp; Founisè</a>
+  <a href="depans.html"><i class="fa-solid fa-money-bill-trend-up"></i> Depans</a>
+  <div class="menu-label">Analiz</div>
+  <a href="rapo.html"><i class="fa-solid fa-chart-line"></i> Rapò</a>
+  <div class="menu-label">Sistèm</div>
+  <a href="paramet.html"><i class="fa-solid fa-gear"></i> Paramèt &amp; Itilizatè</a>`;
+
+const KESYE_MENU = `
+  <div class="menu-label">Meni</div>
+  <a href="kesye.html"><i class="fa-solid fa-gauge-high"></i> Dashboard</a>
+  <a href="pos.html"><i class="fa-solid fa-cash-register"></i> POS — Vann</a>
+  <a href="kliyan.html" class="active"><i class="fa-solid fa-users"></i> Kliyan</a>`;
+
+(async () => {
+  user = await requireRole(['Admin', 'Kesye']);
+  if (!user) return;
+  initShell(user);
+
+  // Meni jere pa wòl
+  document.getElementById('sideMenu').innerHTML = user.role === 'Admin' ? ADMIN_MENU : KESYE_MENU;
+  document.getElementById('brandRole').textContent = user.role === 'Admin' ? 'Panèl Admin · v2.0' : 'Panèl Kesye · v2.0';
+
+  // Kesye pa wè tab Founisè
+  if (user.role === 'Admin') {
+    document.getElementById('tabFounise').style.display = '';
+    loadSuppliers();
+  }
+
+  loadClients();
+})();
+
+// Tabs
+document.querySelectorAll('.tab-btn').forEach(b => b.addEventListener('click', () => {
+  document.querySelectorAll('.tab-btn').forEach(x => x.classList.remove('active'));
+  document.querySelectorAll('.tab-pane').forEach(x => x.classList.remove('active'));
+  b.classList.add('active');
+  document.getElementById('pane-' + b.dataset.tab).classList.add('active');
+}));
+
+// ============ KLIYAN ============
+async function loadClients() {
+  const res = await api('clients.php');
+  if (res.success) { clients = res.data; renderClients(); }
+}
+
+function waLink(tel) {
+  return 'https://wa.me/' + String(tel || '').replace(/[^0-9]/g, '');
+}
+
+function renderClients() {
+  const q = document.getElementById('searchClient').value.toLowerCase().trim();
+  const list = clients.filter(c => !q || c.non.toLowerCase().includes(q) || (c.telefon || '').includes(q));
+  const tips = { regilye: 'badge-muted', vip: 'badge-warning', gwo: 'badge-purple' };
+  const tipLbl = { regilye: 'Regilye', vip: '⭐ VIP', gwo: 'Gwo Kliyan' };
+
+  document.getElementById('tblClients').innerHTML = list.length
+    ? list.map(c => `
+        <tr>
+          <td style="display:flex;align-items:center;gap:10px;">
+            <div class="avatar" style="width:34px;height:34px;font-size:12px;">${initials(c.non)}</div>
+            <b>${esc(c.non)}</b>
+          </td>
+          <td>${esc(c.telefon || '—')}</td>
+          <td>${esc(c.email || '—')}</td>
+          <td><span class="badge ${tips[c.tip]}">${tipLbl[c.tip]}</span></td>
+          <td><span class="badge badge-info">${c.pwen_fidelite} pts</span></td>
+          <td class="actions">
+            ${c.telefon ? `<a href="${waLink(c.telefon)}" target="_blank" class="btn btn-success btn-icon" title="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>` : ''}
+            <button class="btn btn-info btn-icon" title="Modifye" onclick="openClientModal(${c.id})"><i class="fa-solid fa-pen"></i></button>
+            ${user.role === 'Admin' ? `<button class="btn btn-danger btn-icon" title="Efase" onclick="deleteClient(${c.id}, '${esc(c.non).replace(/'/g, "\\'")}')"><i class="fa-solid fa-trash"></i></button>` : ''}
+          </td>
+        </tr>`).join('')
+    : `<tr><td colspan="6"><div class="empty-state"><i class="fa-solid fa-users"></i><p>Okenn kliyan pa jwenn.</p></div></td></tr>`;
+}
+document.getElementById('searchClient').addEventListener('input', renderClients);
+
+function openClientModal(id) {
+  const f = document.getElementById('clientForm');
+  f.reset();
+  document.getElementById('cId').value = '';
+  document.getElementById('clientModalTitle').innerHTML = '<i class="fa-solid fa-user-plus"></i> Nouvo Kliyan';
+  if (id) {
+    const c = clients.find(x => x.id == id);
+    if (c) {
+      document.getElementById('clientModalTitle').innerHTML = '<i class="fa-solid fa-pen"></i> Modifye Kliyan';
+      document.getElementById('cId').value = c.id;
+      document.getElementById('cNon').value = c.non;
+      document.getElementById('cTel').value = c.telefon || '';
+      document.getElementById('cEmail').value = c.email || '';
+      document.getElementById('cAdres').value = c.adres || '';
+      document.getElementById('cVil').value = c.vil || '';
+      document.getElementById('cTip').value = c.tip;
+    }
+  }
+  openModal('clientModal');
+}
+
+document.getElementById('clientForm').addEventListener('submit', async e => {
+  e.preventDefault();
+  const id = document.getElementById('cId').value;
+  const res = await api('clients.php', id ? 'PUT' : 'POST', {
+    id: id || undefined,
+    non: document.getElementById('cNon').value.trim(),
+    telefon: document.getElementById('cTel').value.trim(),
+    email: document.getElementById('cEmail').value.trim(),
+    adres: document.getElementById('cAdres').value.trim(),
+    vil: document.getElementById('cVil').value.trim(),
+    tip: document.getElementById('cTip').value
+  });
+  if (res.success) { toast(res.message, 'success'); closeModal('clientModal'); loadClients(); }
+  else toast(res.message, 'error');
+});
+
+async function deleteClient(id, non) {
+  if (!confirmAction(`Èske ou sèten ou vle efase kliyan "${non}"?`)) return;
+  const res = await api('clients.php?id=' + id, 'DELETE');
+  if (res.success) { toast(res.message, 'success'); loadClients(); }
+  else toast(res.message, 'error');
+}
+
+// ============ FOUNISÈ ============
+async function loadSuppliers() {
+  const res = await api('suppliers.php');
+  if (res.success) { suppliers = res.data; renderSuppliers(); }
+}
+
+function renderSuppliers() {
+  const q = document.getElementById('searchSupplier').value.toLowerCase().trim();
+  const list = suppliers.filter(s => !q || s.non.toLowerCase().includes(q) || (s.konpayi || '').toLowerCase().includes(q));
+
+  document.getElementById('tblSuppliers').innerHTML = list.length
+    ? list.map(s => `
+        <tr>
+          <td style="display:flex;align-items:center;gap:10px;">
+            <div class="avatar" style="width:34px;height:34px;font-size:12px;background:linear-gradient(135deg,#f59e0b,#d97706);">${initials(s.non)}</div>
+            <b>${esc(s.non)}</b>
+          </td>
+          <td>${esc(s.konpayi || '—')}</td>
+          <td>${esc(s.telefon || '—')}</td>
+          <td>${esc(s.email || '—')}</td>
+          <td>${esc(s.nif || '—')}</td>
+          <td class="actions">
+            <button class="btn btn-info btn-icon" onclick="openSupplierModal(${s.id})"><i class="fa-solid fa-pen"></i></button>
+            <button class="btn btn-danger btn-icon" onclick="deleteSupplier(${s.id}, '${esc(s.non).replace(/'/g, "\\'")}')"><i class="fa-solid fa-trash"></i></button>
+          </td>
+        </tr>`).join('')
+    : `<tr><td colspan="6"><div class="empty-state"><i class="fa-solid fa-truck-field"></i><p>Okenn founisè pa jwenn.</p></div></td></tr>`;
+}
+document.getElementById('searchSupplier').addEventListener('input', renderSuppliers);
+
+function openSupplierModal(id) {
+  const f = document.getElementById('supplierForm');
+  f.reset();
+  document.getElementById('sId').value = '';
+  document.getElementById('supplierModalTitle').innerHTML = '<i class="fa-solid fa-plus"></i> Nouvo Founisè';
+  if (id) {
+    const s = suppliers.find(x => x.id == id);
+    if (s) {
+      document.getElementById('supplierModalTitle').innerHTML = '<i class="fa-solid fa-pen"></i> Modifye Founisè';
+      document.getElementById('sId').value = s.id;
+      document.getElementById('sNon').value = s.non;
+      document.getElementById('sKonpayi').value = s.konpayi || '';
+      document.getElementById('sTel').value = s.telefon || '';
+      document.getElementById('sEmail').value = s.email || '';
+      document.getElementById('sAdres').value = s.adres || '';
+      document.getElementById('sNif').value = s.nif || '';
+    }
+  }
+  openModal('supplierModal');
+}
+
+document.getElementById('supplierForm').addEventListener('submit', async e => {
+  e.preventDefault();
+  const id = document.getElementById('sId').value;
+  const res = await api('suppliers.php', id ? 'PUT' : 'POST', {
+    id: id || undefined,
+    non: document.getElementById('sNon').value.trim(),
+    konpayi: document.getElementById('sKonpayi').value.trim(),
+    telefon: document.getElementById('sTel').value.trim(),
+    email: document.getElementById('sEmail').value.trim(),
+    adres: document.getElementById('sAdres').value.trim(),
+    nif: document.getElementById('sNif').value.trim()
+  });
+  if (res.success) { toast(res.message, 'success'); closeModal('supplierModal'); loadSuppliers(); }
+  else toast(res.message, 'error');
+});
+
+async function deleteSupplier(id, non) {
+  if (!confirmAction(`Èske ou sèten ou vle efase founisè "${non}"?`)) return;
+  const res = await api('suppliers.php?id=' + id, 'DELETE');
+  if (res.success) { toast(res.message, 'success'); loadSuppliers(); }
+  else toast(res.message, 'error');
+}
+</script>
+</body>
+</html>
